@@ -1,10 +1,17 @@
 from flask import Flask, render_template, redirect, request
+from flask_pymongo import PyMongo
+from random import seed, randint
 
 # app = Flask(__name__,
 #             static_url_path='/static',
 #             static_folder='/static')
 
 app = Flask(__name__)
+
+app.config['MONGO_DBNAME'] = 'studentconnect'
+app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/studentconnect'
+
+mongo = PyMongo(app)
 
 
 @app.route("/")
@@ -17,7 +24,7 @@ def login():
     if request.method == 'POST':
         if 0:  # check user name
             # check password
-            return render_template("dashboard.html")
+            return render_template("index.html")
         else:
             # flash error
             return render_template("dashboard.html")
@@ -27,17 +34,30 @@ def login():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    users = mongo.db.users
     if request.method == 'POST':
         email = request.form['email']
         if 0:  # check email already present
+            # flash error
             return render_template("register.html")
         else:
-            fname = request.form['fname']
-            lname = request.form['lname']
-            mname = request.form['mname']
-            pass1 = request.form['password']
+            fname = request.form['fname'].strip()
+            lname = request.form['lname'].strip()
+            mname = request.form['mname'].strip()
+            pass1 = request.form['password'].strip()
+            # bcrypt password
             # create unique username
+            userid = fname+lname+str(randint(10, 999))
+
             #store in DB
+            users.insert_one({
+                'fname': fname,
+                'lname': lname,
+                'mname': mname,
+                'email': email,
+                'password': pass1,
+                'userid': userid})
+
             return render_template("dashboard.html")
     else:
         return render_template("register.html")
