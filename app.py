@@ -21,24 +21,29 @@ def index1():
 
 @app.route("/login", methods=['POST', 'GET'])
 def login():
+    users = mongo.db.users
     if request.method == 'POST':
-        if 0:  # check user name
+        userid = request.form['userid'].strip()
+        password = request.form['password'].strip()
+        userPresent = users.find_one({'userid': userid})
+        if userPresent:  # check user name
             # check password
             return render_template("index.html")
         else:
             # flash error
-            return render_template("dashboard.html")
+            return render_template("login.html")
     else:
-        return render_template("loginA.html")
+        return render_template("login.html")
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     users = mongo.db.users
     if request.method == 'POST':
-        email = request.form['email']
-        if 0:  # check email already present
-            # flash error
+        email = request.form['email'].strip()
+        userPresent = users.find_one({'email': email})
+        if userPresent:  # check email already present
+            # flash error already present
             return render_template("register.html")
         else:
             fname = request.form['fname'].strip()
@@ -58,9 +63,25 @@ def register():
                 'password': pass1,
                 'userid': userid})
 
-            return render_template("dashboard.html")
+            return render_template("index.html")
     else:
         return render_template("register.html")
+
+
+@app.route('/resetPassword', methods=['POST', 'GET'])
+def resetPassword():
+    users = mongo.db.users
+    if request.method == 'POST':
+        email = request.form['email'].strip()
+        emailPresent = users.find_one({"email": email})
+        if emailPresent:
+            # send reset mail
+            pass
+        else:
+            # flash email wrong
+            pass
+    else:
+        return render_template("resetPassword.html")
 
 
 if __name__ == '__main__':
