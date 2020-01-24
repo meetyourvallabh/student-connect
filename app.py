@@ -4,7 +4,7 @@ from random import seed, randint
 import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
-from flask_simple_geoip import SimpleGeoIP
+# from flask_simple_geoip import SimpleGeoIP
 
 # app = Flask(__name__,
 #             static_url_path='/static',
@@ -22,7 +22,7 @@ app.config['MAIL_PASSWORD'] = 'myocoo@123'
 
 mongo = PyMongo(app)
 mail = Mail(app)
-simple_geoip = SimpleGeoIP(app)
+# simple_geoip = SimpleGeoIP(app)
 
 
 
