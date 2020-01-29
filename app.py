@@ -4,7 +4,6 @@ from random import seed, randint
 import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
-# from flask_simple_geoip import SimpleGeoIP
 
 # app = Flask(__name__,
 #             static_url_path='/static',
@@ -22,7 +21,7 @@ app.config['MAIL_PASSWORD'] = 'myocoo@123'
 
 mongo = PyMongo(app)
 mail = Mail(app)
-# simple_geoip = SimpleGeoIP(app)
+
 
 
 
@@ -38,6 +37,16 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
+# Check if user logged in
+def is_already_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return redirect(url_for('index'))
+        else:
+            return f(*args, **kwargs)
+    return wrap
+
 
 
 @app.route("/")
@@ -47,6 +56,7 @@ def index():
 
 
 @app.route("/login", methods=['POST', 'GET'])
+@is_already_logged_in
 def login():
     
     if request.method == 'POST':
@@ -69,8 +79,7 @@ def login():
                         session['branch'] = found_user['branch']
                         session['logged_in']=True
 
-                        geoip_data = simple_geoip.get_geoip_data()
-                        session['geoip_data'] = geoip_data
+                        
 
                         flash('Login Successfull','success')
                         return redirect(url_for('index'))
@@ -102,6 +111,7 @@ def login():
 
 
 @app.route('/register', methods=['POST', 'GET'])
+@is_already_logged_in
 def register():
     
     if request.method == 'POST':
@@ -204,6 +214,7 @@ def changepasswordtoken(token):
     return redirect(url_for('login'))
 
 @app.route('/logout')
+@is_logged_in
 def logout():
     if 'logged_in' in session:
         session.clear()
