@@ -8,7 +8,30 @@
 
 <body class="navbar-top">
   {% include "includes/_navbar.html" %}
-  {%block body%} {%endblock%}
+  <!-- Page content -->
+  <div class="page-content">
+    {% include "includes/_sidebar.html" %}
+
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+
+      {% include "includes/_page_header.html" %}
+
+
+      <!-- Content area -->
+      <div class="content">
+        {%block body%} {%endblock%}
+      </div>
+      <!-- /content area -->
+
+
+      {% include "includes/_footer.html" %}
+
+    </div>
+    <!-- /main content -->
+
+  </div>
 </body>
 
 </html>
