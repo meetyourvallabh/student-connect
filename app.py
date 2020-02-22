@@ -5,11 +5,17 @@ import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
 
+from attendance.routes import mod
+
+
+
 # app = Flask(__name__,
 #             static_url_path='/static',
 #             static_folder='/static')
 
 app = Flask(__name__)
+
+app.register_blueprint(mod,url_prefix='/attendance')
 
 app.config['MONGO_DBNAME'] = 'students_connect'
 app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/students_connect'
