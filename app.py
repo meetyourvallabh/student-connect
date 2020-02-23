@@ -225,6 +225,25 @@ def logout():
         return redirect(url_for('login'))
 
 
+@app.route("/profile", methods=['POST','GET'])
+@is_logged_in
+def profile():
+    users = mongo.db.users
+    user = users.find_one({"email":session['email'], "type":"student"})
+
+    if request.method == "POST":
+        users.update_one({"email":session['email'],"type":"student"},{"$set":{"email":request.form['email'],
+                        "fname":request.form['fname'],"lname":request.form['lname'],
+                        "mname":request.form['mname'],"address":request.form['address'],
+                        "phone":request.form['phone'],"branch":request.form['branch'],
+                        "division":request.form['division'],"year":request.form['year']
+                        }},upsert=True)
+
+        user = users.find_one({"email":session['email'], "type":"student"})    
+        return render_template("profile.html",user=user)
+
+    return render_template("profile.html",user=user)
+
 if __name__ == '__main__':
     app.secret_key = 'secret123'
     app.run(host='0.0.0.0', debug='true', port='5001')
