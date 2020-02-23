@@ -1,11 +1,14 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, session
 from flask_pymongo import PyMongo
-from random import seed, randint
+from random import *
 import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
 import os
+import datetime, string
 from attendance.routes import mod
+import face_recognition
+from PIL import Image
 
 
 
@@ -29,6 +32,8 @@ mongo = PyMongo(app)
 mail = Mail(app)
 
 
+def random_chars(y):
+    return ''.join(choice(string.ascii_letters) for x in range(y))
 
 
 
@@ -255,19 +260,43 @@ def profile():
 def upload_profile_image(username):
     if request.method == 'POST':
         users = mongo.db.users
+        user = users.find_one({'username':username})
         path = os.path.abspath('static/student/'+username)
+        train_path = os.path.abspath('static/student/'+username+'/train_img')
+
         if not os.path.exists(path):
             os.makedirs(path)
+        if not os.path.exists(train_path):
+            os.makedirs(train_path)
+
         app.config['UPLOAD_FOLDER'] = path
         if 'image' not in request.files:
             flash('No file part')
             return redirect(request.url)
+
+        if 'pro_pic' in user:
+            if os.path.exists('static/'+user['pro_pic']):
+                os.remove('static/'+user['pro_pic'])
+            if os.path.exists('static/student/'+username+'/train_img/pro_pic.jpg'):
+                os.remove('static/student/'+username+'/train_img/pro_pic.jpg')
         
         file = request.files['image']
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        print(path+file.filename)
+        
         
         file.save(f)
+        pro_pic_image = face_recognition.load_image_file(file)
+        
+        face_locations = face_recognition.face_locations(pro_pic_image)[0]
+
+        top, right, bottom, left = face_locations
+        face_image = pro_pic_image[top-100:bottom+100, left-100:right+100]
+        pil_image = Image.fromarray(face_image)
+
+        random_name = random_chars(7)+str(randint(111,999))
+        pil_image.save('static/student/'+username+'/train_img/pro_pic.jpg')
+
+        
         users.update_one({'username':username},{'$set':{'pro_pic':'student/'+username+'/'+file.filename}})
     return redirect(url_for('profile'))
 
