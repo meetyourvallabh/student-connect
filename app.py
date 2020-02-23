@@ -32,6 +32,8 @@ mongo = PyMongo(app)
 mail = Mail(app)
 
 
+#app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # for 16MB max-limit.
+
 def random_chars(y):
     return ''.join(choice(string.ascii_letters) for x in range(y))
 
@@ -313,30 +315,122 @@ def upload_profile_image(username):
             flash('No file part')
             return redirect(request.url)
 
-        if 'pro_pic' in user:
-            if os.path.exists('static/'+user['pro_pic']):
-                os.remove('static/'+user['pro_pic'])
-            if os.path.exists('static/student/'+username+'/train_img/pro_pic.jpg'):
-                os.remove('static/student/'+username+'/train_img/pro_pic.jpg')
+        
         
         file = request.files['image']
-        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         
         
-        file.save(f)
         pro_pic_image = face_recognition.load_image_file(file)
         
-        face_locations = face_recognition.face_locations(pro_pic_image)[0]
+        face_locations = face_recognition.face_locations(pro_pic_image)
+        
+        if len(face_locations) > 0:
+            if len(face_locations) <= 1:
+                
+        
+                if 'pro_pic' in user:
+                    if os.path.exists('static/'+user['pro_pic']):
+                        os.remove('static/'+user['pro_pic'])
+                    if os.path.exists('static/student/'+username+'/train_img/pro_pic.jpg'):
+                        os.remove('static/student/'+username+'/train_img/pro_pic.jpg')
+                
+                top, right, bottom, left = face_locations[0]
+                face_image = pro_pic_image[top-50:bottom+50, left-50:right+50]
+                pil_image = Image.fromarray(face_image)
 
-        top, right, bottom, left = face_locations
-        face_image = pro_pic_image[top-100:bottom+100, left-100:right+100]
-        pil_image = Image.fromarray(face_image)
+                random_name = random_chars(7)+str(randint(111,999))
+                pil_image.save('static/student/'+username+'/train_img/pro_pic.jpg')
+                new_image = Image.fromarray(pro_pic_image)
+                new_image.save('static/student/'+username+'/pro_pic.jpg')
 
-        random_name = random_chars(7)+str(randint(111,999))
-        pil_image.save('static/student/'+username+'/train_img/pro_pic.jpg')
+                
+                
+                
+            else:
+                flash('Your image contains multiple people','danger')
+                return redirect(url_for('profile'))
+        else:
+            flash('Your image contains no faces','danger')
+            return redirect(url_for('profile'))
+        
+        #f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        #file.save(f)
+        users.update_one({'username':username},{'$set':{'pro_pic':'student/'+username+'/pro_pic.jpg'}})
+        flash('Profile Image uploaded succesfully','success')
+    return redirect(url_for('profile'))
+
+
+
+@app.route('/upload_profile_image1/<username>', methods=['POST'])
+def upload_profile_image1(username):
+    if request.method == 'POST':
+        users = mongo.db.users
+        user = users.find_one({'username':username})
+        path = os.path.abspath('static/student/'+username)
+        train_path = os.path.abspath('static/student/'+username+'/train_img')
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+        if not os.path.exists(train_path):
+            os.makedirs(train_path)
+
+        app.config['UPLOAD_FOLDER'] = path
+        if 'image' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
 
         
+        
+        file = request.files['image']
+        file.seek(0, os.SEEK_END)
+        file_length = file.tell()
+        print(file_length)
+        if not file_length < 1024000 :
+            flash('File size is greater than 1 mb','danger')
+            return redirect(url_for('profile'))
+        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(f)
+
+        image_file = request.files['image']
+        
+        pro_pic_image = face_recognition.load_image_file(image_file)
+        
+        face_locations = face_recognition.face_locations(pro_pic_image)
+        
+        if len(face_locations) > 0:
+            if len(face_locations) <= 1:
+                
+        
+                if 'pro_pic' in user:
+                    if os.path.exists('static/'+user['pro_pic']):
+                        os.remove('static/'+user['pro_pic'])
+                    if os.path.exists('static/student/'+username+'/train_img/pro_pic.jpg'):
+                        os.remove('static/student/'+username+'/train_img/pro_pic.jpg')
+                
+                top, right, bottom, left = face_locations[0]
+                face_image = pro_pic_image[top-50:bottom+50, left-50:right+50]
+                pil_image = Image.fromarray(face_image)
+
+                random_name = random_chars(7)+str(randint(111,999))
+                pil_image.save('static/student/'+username+'/train_img/pro_pic.jpg')
+                #new_image = Image.fromarray(pro_pic_image)
+                #new_image.save('static/student/'+username+'/pro_pic.jpg')
+
+                
+                
+                
+            else:
+                os.remove('static/student/'+username+'/'+file.filename)
+                flash('Your image contains multiple people','danger')
+                return redirect(url_for('profile'))
+        else:
+            os.remove('static/student/'+username+'/'+file.filename)
+            flash('Your image contains no faces','danger')
+            return redirect(url_for('profile'))
+        
+        
         users.update_one({'username':username},{'$set':{'pro_pic':'student/'+username+'/'+file.filename}})
+        flash('Profile Image uploaded succesfully','success')
     return redirect(url_for('profile'))
 
 
