@@ -15,6 +15,7 @@
 
 {% block body %}
 
+{% include "includes/_messages.html" %}
 
 <!-- Inner container -->
 <div class="d-flex align-items-start flex-column flex-md-row">
@@ -381,7 +382,7 @@
         <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Modal with icons</h5>
         <button type="button" class="close" data-dismiss="modal">×</button>
       </div>
-      <form action="{{url_for('upload_profile_image',username=user.username)}}" method="POST"
+      <form action="{{url_for('upload_profile_image1',username=user.username)}}" method="POST"
         enctype="multipart/form-data">
         <div class="modal-body">
           <div class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
@@ -391,10 +392,10 @@
 
           <div>
             <label>Upload profile image</label>
-            <input type="file" name="image" class="form-input-styled" data-fouc />
+            <input type="file" name="image" class="form-input-styled" />
 
             <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size
-              2Mb</span>
+              1Mb</span>
           </div>
 
         </div>
