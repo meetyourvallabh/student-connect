@@ -82,7 +82,6 @@ def login():
                         session['email']=found_user['email']
                         session['year']=found_user['year']
                         session['branch']=found_user['branch']
-                        session['branch'] = found_user['branch']
                         session['logged_in']=True
 
                         
@@ -94,14 +93,14 @@ def login():
                         flash('Wait for the email if not recieved','warning')
                         return redirect(url_for('login'))
                 else:
-                    session['fname'] = founduser['fname']
-                    session['mname'] = founduser['mname']
-                    session['lname'] = founduser['lname']
-                    session['type'] = founduser['type']
-                    session['email']=founduser['email']
+                    session['fname'] = found_user['fname']
+                    session['mname'] = found_user['mname']
+                    session['lname'] = found_user['lname']
+                    session['type'] = found_user['type']
+                    session['email']=found_user['email']
                     session['logged_in']=True
-                    if founduser['type'] in ['hod','mentor']:
-                            session['branch'] = founduser['branch']
+                    if found_user['type'] in ['hod','mentor']:
+                            session['branch'] = found_user['branch']
                     flash('Login Successfull','success')
                     return redirect(url_for('index'))
             else:
@@ -126,6 +125,20 @@ def register():
         verification_code = str(randint(1111,9999))
         username = (request.form['fname']+request.form['mname'][0]+request.form['lname'][0]+str(randint(11,99))).lower()
         
+        username_exist = users.find_one({"username":username})
+        email_exist = users.find_one({"email":request.form['email']})
+        prn_exist = users.find_one({"prn":request.form['prn']})
+        if email_exist: #new email already in use
+            flash("Email Already exists","danger")
+            return render_template("register.html")
+        elif username_exist: #new username already in use
+            flash("Username Already exists","danger")
+            return render_template("register.html")
+        elif prn_exist: #prn already in use
+            flash("PRN Already exists","danger")
+            return render_template("register.html")
+        
+
         if users.find_one({'username':username}) is not None:
             username = request.form['fname']+request.form['mname'][0]+request.form['lname'][0]+str(randint(11,99))
 
@@ -237,16 +250,42 @@ def profile():
     users = mongo.db.users
     user = users.find_one({"email":session['email'], "type":"student"})
 
-    if request.method == "POST":
-        users.update_one({"email":session['email'],"type":"student"},{"$set":{"email":request.form['email'],
+    if request.method == "POST":  
+        username_exist = users.find_one({"username":request.form['username']})
+        email_exist = users.find_one({"email":request.form['email']})
+        prn_exist = users.find_one({"prn":request.form['prn']})
+        if email_exist and user['email'] != email_exist['email']: #new email already in use
+            flash("Email Already exists","danger")
+            return render_template("profile.html",user=user)
+        elif username_exist and user['username'] != username_exist['username']: #new username 
+            flash("Username Already exists","danger")
+            return render_template("profile.html",user=user)
+        elif prn_exist and user['prn'] != prn_exist['prn']: #prn already used
+            flash("PRN Already exists","danger")
+            return render_template("profile.html",user=user)
+        else:
+            #update new user details
+            users.update_one({"email":session['email'],"type":"student"},{"$set":{
+                        "email":request.form['email'],"username":request.form['username'],
                         "fname":request.form['fname'],"lname":request.form['lname'],
                         "mname":request.form['mname'],"address":request.form['address'],
                         "phone":request.form['phone'],"branch":request.form['branch'],
-                        "division":request.form['division'],"year":request.form['year']
+                        "division":request.form['division'],"year":request.form['year'],
+                        "prn":request.form['prn']
                         }},upsert=True)
-
-        user = users.find_one({"email":session['email'], "type":"student"})    
-        return render_template("profile.html",user=user)
+            #update session
+            updated_user = users.find_one({"email":request.form['email'], "type":"student"})
+            session['username'] = updated_user['username']
+            session['fname'] = updated_user['fname']
+            session['mname'] = updated_user['mname']
+            session['lname'] = updated_user['lname']
+            session['type'] = updated_user['type']
+            session['email']=updated_user['email']
+            session['year']=updated_user['year']
+            session['branch']=updated_user['branch']
+            session['logged_in']=True
+            flash("Profile Updated Successfully","success")
+            return render_template("profile.html",user=updated_user)
 
     return render_template("profile.html",user=user)
 
