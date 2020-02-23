@@ -4,7 +4,7 @@ from random import seed, randint
 import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
-
+import os
 from attendance.routes import mod
 
 
@@ -249,6 +249,29 @@ def profile():
         return render_template("profile.html",user=user)
 
     return render_template("profile.html",user=user)
+
+
+@app.route('/upload_profile_image/<username>', methods=['POST'])
+def upload_profile_image(username):
+    if request.method == 'POST':
+        users = mongo.db.users
+        path = os.path.abspath('static/student/'+username)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        app.config['UPLOAD_FOLDER'] = path
+        if 'image' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        
+        file = request.files['image']
+        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        print(path+file.filename)
+        
+        file.save(f)
+        users.update_one({'username':username},{'$set':{'pro_pic':'student/'+username+'/'+file.filename}})
+    return redirect(url_for('profile'))
+
+
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
