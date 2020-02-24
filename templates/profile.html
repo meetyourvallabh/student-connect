@@ -154,17 +154,12 @@
       </div>
 
       <div class="card-body">
-        <form action="#">
+        <form action="{{url_for('profile_step',step=2)}}" method="POST">
           <div class="form-group">
             <div class="row">
               <div class="col-md-6">
                 <label>Username</label>
-                <input type="text" value="Kopyov" readonly="readonly" class="form-control" />
-              </div>
-
-              <div class="col-md-6">
-                <label>Current password</label>
-                <input type="password" value="password" readonly="readonly" class="form-control" />
+                <input type="text" value="{{user.username}}" class="form-control" id="username" name="username" />
               </div>
             </div>
           </div>
@@ -173,12 +168,12 @@
             <div class="row">
               <div class="col-md-6">
                 <label>New password</label>
-                <input type="password" placeholder="Enter new password" class="form-control" />
+                <input type="password" placeholder="Enter new password" class="form-control" id="password" name="password"/>
               </div>
 
               <div class="col-md-6">
                 <label>Repeat password</label>
-                <input type="password" placeholder="Repeat new password" class="form-control" />
+                <input type="password" placeholder="Repeat new password" class="form-control" id="repassword" name="repassword"/>
               </div>
             </div>
           </div>
