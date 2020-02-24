@@ -121,235 +121,253 @@
         </div>
       </div>
       <!-- /profile info -->
-
-      <!-- Account settings -->
       <div class="card">
         <div class="card-header header-elements-inline">
-          <h5 class="card-title">Account settings</h5>
-          <div class="header-elements">
-            <div class="list-icons">
-              <a class="list-icons-item" data-action="collapse"></a>
-              <a class="list-icons-item" data-action="reload"></a>
-              <a class="list-icons-item" data-action="remove"></a>
-            </div>
-          </div>
+          <h5>Profile Picture</h5>
         </div>
-
         <div class="card-body">
-          <form action="#">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <label>Username</label>
-                  <input type="text" value="Kopyov" readonly="readonly" class="form-control" />
-                </div>
+          <form action="{{url_for('upload_profile_image',username=user.username)}}" method="POST"
+            enctype="multipart/form-data">
+            <div>
+              <label>Upload profile image</label>
 
-                <div class="col-md-6">
-                  <label>Current password</label>
-                  <input type="password" value="password" readonly="readonly" class="form-control" />
-                </div>
-              </div>
-            </div>
+              <input type="file" name="image" class="form-input-styled" />
 
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <label>New password</label>
-                  <input type="password" placeholder="Enter new password" class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                  <label>Repeat password</label>
-                  <input type="password" placeholder="Repeat new password" class="form-control" />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <label>Profile visibility</label>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" checked data-fouc />
-                      Visible to everyone
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
-                      Visible to friends only
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
-                      Visible to my connections only
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
-                      Visible to my colleagues only
-                    </label>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <label>Notifications</label>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
-                      Password expiration notification
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
-                      New message notification
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
-                      New task notification
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" />
-                      New contact request notification
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="text-right">
-              <button type="submit" class="btn btn-primary">
-                Save changes
-              </button>
-            </div>
+              <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size
+                1Mb</span>
           </form>
+
         </div>
       </div>
-      <!-- /account settings -->
     </div>
-  </div>
-  <!-- /left content -->
+    <!-- Account settings -->
+    <div class="card">
+      <div class="card-header header-elements-inline">
+        <h5 class="card-title">Account settings</h5>
+        <div class="header-elements">
+          <div class="list-icons">
+            <a class="list-icons-item" data-action="collapse"></a>
+            <a class="list-icons-item" data-action="reload"></a>
+            <a class="list-icons-item" data-action="remove"></a>
+          </div>
+        </div>
+      </div>
 
-  <!-- Right sidebar component -->
-  <div
-    class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-right wmin-300 border-0 shadow-0 order-1 order-md-2 sidebar-expand-md">
-    <!-- Sidebar content -->
-    <div class="sidebar-content">
-      <!-- User card -->
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="card-img-actions d-inline-block mb-3">
-            <img class="img-fluid rounded-circle"
-              src="{% if user.pro_pic is defined %}{{url_for('static',filename=user.pro_pic)}}{%else%}{{url_for('static',filename='global_assets/images/placeholders/placeholder.jpg')}}{% endif %}"
-              width="170" height="170" alt="" />
-            <div class="card-img-actions-overlay card-img rounded-circle">
-              <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
-                data-toggle="modal" data-target="#modal_iconified">
-                <i class="icon-plus3"></i>
-              </a>
-              <a href="user_pages_profile.html"
-                class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
-                <i class="icon-link"></i>
-              </a>
+      <div class="card-body">
+        <form action="#">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Username</label>
+                <input type="text" value="Kopyov" readonly="readonly" class="form-control" />
+              </div>
+
+              <div class="col-md-6">
+                <label>Current password</label>
+                <input type="password" value="password" readonly="readonly" class="form-control" />
+              </div>
             </div>
           </div>
 
-          <h6 class="font-weight-semibold mb-0">Hanna Dorman</h6>
-          <span class="d-block text-muted">UX/UI designer</span>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <label>New password</label>
+                <input type="password" placeholder="Enter new password" class="form-control" />
+              </div>
 
-          <div class="list-icons list-icons-extended mt-3">
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i
-                class="icon-google-drive"></i></a>
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i
-                class="icon-twitter"></i></a>
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i
-                class="icon-github"></i></a>
-          </div>
-        </div>
-      </div>
-      <!-- /user card -->
-
-      <!-- Navigation -->
-      <div class="card">
-        <div class="card-header bg-transparent header-elements-inline">
-          <span class="card-title font-weight-semibold">Navigation</span>
-          <div class="header-elements">
-            <div class="list-icons">
-              <a class="list-icons-item" data-action="collapse"></a>
+              <div class="col-md-6">
+                <label>Repeat password</label>
+                <input type="password" placeholder="Repeat new password" class="form-control" />
+              </div>
             </div>
           </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Profile visibility</label>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="radio" name="visibility" class="form-input-styled" checked data-fouc />
+                    Visible to everyone
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                    Visible to friends only
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                    Visible to my connections only
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                    Visible to my colleagues only
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label>Notifications</label>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-input-styled" checked data-fouc />
+                    Password expiration notification
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-input-styled" checked data-fouc />
+                    New message notification
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-input-styled" checked data-fouc />
+                    New task notification
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-input-styled" />
+                    New contact request notification
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <button type="submit" class="btn btn-primary">
+              Save changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /account settings -->
+  </div>
+</div>
+<!-- /left content -->
+
+<!-- Right sidebar component -->
+<div
+  class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-right wmin-300 border-0 shadow-0 order-1 order-md-2 sidebar-expand-md">
+  <!-- Sidebar content -->
+  <div class="sidebar-content">
+    <!-- User card -->
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="card-img-actions d-inline-block mb-3">
+          <img class="img-fluid rounded-circle"
+            src="{% if user.pro_pic is defined %}{{url_for('static',filename=user.pro_pic)}}{%else%}{{url_for('static',filename='global_assets/images/placeholders/placeholder.jpg')}}{% endif %}"
+            width="170" height="170" alt="" />
+          <div class="card-img-actions-overlay card-img rounded-circle">
+            <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
+              data-toggle="modal" data-target="#modal_iconified">
+              <i class="icon-plus3"></i>
+            </a>
+            <a href="user_pages_profile.html"
+              class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+              <i class="icon-link"></i>
+            </a>
+          </div>
         </div>
 
-        <div class="card-body p-0">
-          <ul class="nav nav-sidebar my-2">
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-user"></i>
-                My profile
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-cash3"></i>
-                Balance
-                <span class="text-muted font-size-sm font-weight-normal ml-auto">$1,430</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-tree7"></i>
-                Connections
-                <span class="badge bg-danger badge-pill ml-auto">29</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-users"></i>
-                Friends
-              </a>
-            </li>
+        <h6 class="font-weight-semibold mb-0">Hanna Dorman</h6>
+        <span class="d-block text-muted">UX/UI designer</span>
 
-            <li class="nav-item-divider"></li>
-
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-calendar3"></i>
-                Events
-                <span class="badge bg-teal-400 badge-pill ml-auto">48</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="icon-cog3"></i>
-                Account settings
-              </a>
-            </li>
-          </ul>
+        <div class="list-icons list-icons-extended mt-3">
+          <a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i
+              class="icon-google-drive"></i></a>
+          <a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i
+              class="icon-twitter"></i></a>
+          <a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i
+              class="icon-github"></i></a>
         </div>
       </div>
-      <!-- /navigation -->
-
-      <!-- Share your thoughts -->
     </div>
-    <!-- /sidebar content -->
+    <!-- /user card -->
+
+    <!-- Navigation -->
+    <div class="card">
+      <div class="card-header bg-transparent header-elements-inline">
+        <span class="card-title font-weight-semibold">Navigation</span>
+        <div class="header-elements">
+          <div class="list-icons">
+            <a class="list-icons-item" data-action="collapse"></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <ul class="nav nav-sidebar my-2">
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-user"></i>
+              My profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-cash3"></i>
+              Balance
+              <span class="text-muted font-size-sm font-weight-normal ml-auto">$1,430</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-tree7"></i>
+              Connections
+              <span class="badge bg-danger badge-pill ml-auto">29</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-users"></i>
+              Friends
+            </a>
+          </li>
+
+          <li class="nav-item-divider"></li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-calendar3"></i>
+              Events
+              <span class="badge bg-teal-400 badge-pill ml-auto">48</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="icon-cog3"></i>
+              Account settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- /navigation -->
+
+    <!-- Share your thoughts -->
   </div>
-  <!-- /right sidebar component -->
+  <!-- /sidebar content -->
+</div>
+<!-- /right sidebar component -->
 </div>
 <!-- /inner container -->
 
@@ -363,7 +381,7 @@
         <button type="button" class="close" data-dismiss="modal">×</button>
       </div>
 
-      <form action="{{url_for('upload_profile_image1',username=user.username)}}" method="POST"
+      <form action="{{url_for('upload_profile_image',username=user.username)}}" method="POST"
         enctype="multipart/form-data">
 
         <div class="modal-body">
