@@ -56,7 +56,7 @@
                                                 class="icon-menu" title="Main"></i>
                                 </li>
                                 <li class="nav-item">
-                                        <a href="index.html" class="nav-link active">
+                                        <a href="{{url_for('index')}}" id="/" class="nav-link active">
                                                 <i class="icon-home4"></i>
                                                 <span>
                                                         Home
@@ -64,7 +64,7 @@
                                         </a>
                                 </li>
                                 <li class="nav-item">
-                                        <a href="{{url_for('profile')}}" class="nav-link">
+                                        <a href="{{url_for('profile')}}" id="/profile/" class="nav-link">
                                                 <i class="icon-profile"></i>
                                                 <span>
                                                         Profile
@@ -72,15 +72,27 @@
                                         </a>
                                 </li>
 
-                                <li class="nav-item">
-                                        <a href="{{url_for('attendance.index')}}" class="nav-link">
-                                                <i class="icon-profile"></i>
-                                                <span>
-                                                        Attendance
-                                                </span>
-                                        </a>
-                                </li>
 
+                                <li class="nav-item nav-item-submenu">
+                                        <a href="#" id="/attendance/" class="nav-link"><i class="icon-copy"></i>
+                                                <span>Attendance
+                                                        System</span></a>
+
+                                        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                                                <li class="nav-item"><a id="/attendance/"
+                                                                href="{{url_for('attendance.index')}}"
+                                                                class="nav-link active">Attendance Dashboard</a></li>
+                                                <li class="nav-item"><a id="/attendance/automatic/"
+                                                                href="{{url_for('attendance.automatic')}}"
+                                                                class="nav-link">Automatic</a></li>
+
+
+                                                <li class="nav-item"><a id="/attendance/manual/" href="#"
+                                                                class="nav-link disabled">Manual <span
+                                                                        class="badge bg-transparent align-self-center ml-auto">Coming
+                                                                        soon</span></a></li>
+                                        </ul>
+                                </li>
 
                                 <!-- /main -->
 
@@ -107,3 +119,22 @@
 
 </div>
 <!-- /main sidebar -->
+
+
+<script>
+
+        var active_link = `{% if url_for(request.endpoint).endswith('/') %}{{ url_for(request.endpoint) }}{% else %}{{ url_for(request.endpoint) }}{% endif %}`;
+
+        //alert(active_link);
+        var element = document.getElementById(active_link);
+        //element.classList.add("active");
+        //alert(element.className);
+
+
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        element.className += " active";
+
+
+
+</script>

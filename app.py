@@ -72,7 +72,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login", methods=['POST', 'GET'])
+@app.route("/login/", methods=['POST', 'GET'])
 @is_already_logged_in
 def login():
     
@@ -126,7 +126,7 @@ def login():
         return render_template("login.html")
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/register/', methods=['POST', 'GET'])
 @is_already_logged_in
 def register():
     
@@ -174,7 +174,7 @@ def register():
     return render_template("register.html")
 
 
-@app.route('/verify/<code>',methods = ['POST','GET'])
+@app.route('/verify/<code>/',methods = ['POST','GET'])
 def verify(code):
     if request.method == 'POST' or 'GET':
         users = mongo.db.users
@@ -201,7 +201,7 @@ def verify(code):
 
 
 
-@app.route('/forgot_password',methods = ['POST','GET'])
+@app.route('/forgot_password/',methods = ['POST','GET'])
 def forgot_password():
     users = mongo.db.users
     if request.method == 'POST':
@@ -221,7 +221,7 @@ def forgot_password():
     return render_template("forgot_password.html")
 
 
-@app.route('/changepasswordtoken/<token>',methods = ['POST','GET'])
+@app.route('/changepasswordtoken/<token>/',methods = ['POST','GET'])
 def changepasswordtoken(token):
     users = mongo.db.users
     if request.method == 'POST':
@@ -243,7 +243,7 @@ def changepasswordtoken(token):
 
     return redirect(url_for('login'))
 
-@app.route('/logout')
+@app.route('/logout/')
 @is_logged_in
 def logout():
     if 'logged_in' in session:
@@ -255,7 +255,7 @@ def logout():
         return redirect(url_for('login'))
 
 
-@app.route("/profile", methods=['POST','GET'])
+@app.route("/profile/", methods=['POST','GET'])
 @is_logged_in
 def profile():
     users = mongo.db.users
@@ -304,7 +304,7 @@ def profile():
 
 
 
-@app.route('/upload_profile_image/<username>', methods=['POST'])
+@app.route('/upload_profile_image/<username>/', methods=['POST'])
 def upload_profile_image(username):
     if request.method == 'POST':
         users = mongo.db.users
