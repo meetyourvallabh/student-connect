@@ -297,6 +297,42 @@ def profile():
     return render_template("profile.html",user=user)
 
 
+@app.route("/profile_step/<step>",methods=['POST','GET'])
+@is_logged_in
+def profile_step(step):
+    users = mongo.db.users
+    user = users.find_one({'email':session['email'],"type":"student"})
+    if request.method == 'POST':
+        if step == "2": #settings change
+            username_exist = users.find_one({"username":request.form['username']})
+            if username_exist and user['username'] != username_exist['username']: #new username already exists
+                flash("Username already exists","danger")
+                return redirect(url_for("profile"))
+
+            passw = request.form['password']
+            if len(passw) >= 8: #password should not be empty
+                hashpass = bcrypt.hashpw(passw.encode('utf-8'), bcrypt.gensalt())
+                users.update_one({"email":session['email'],"type":"student"},{"$set":{
+                    "username":request.form['username'],
+                    "password":hashpass
+                }})    
+                session['username'] = request.form['username']
+                flash("Account Updated Successfully!","success")
+                return redirect(url_for("profile"))
+            elif len(passw) == 0: #username change, no password change
+                users.update_one({"email":session['email'],"type":"student"},{"$set":{
+                    "username":request.form['username'],
+                }})    
+                session['username'] = request.form['username']
+                flash("Account Updated Successfully!","success")
+                return redirect(url_for("profile"))
+            else:
+                flash("Password Should be greater than 8!","danger")
+                return redirect(url_for("profile"))
+                
+    return redirect(url_for("profile"))
+
+
 @app.route('/upload_profile_image/<username>', methods=['POST'])
 def upload_profile_image(username):
     if request.method == 'POST':

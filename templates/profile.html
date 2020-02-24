@@ -5,9 +5,7 @@
 <script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
 <script src="{{url_for('static',filename='global_assets/js/plugins/ui/moment/moment.min.js')}}"></script>
 <script src="{{url_for('static',filename='global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js')}}"></script>
-{% endblock %}
-{% block body %}
-{% include "includes/_messages.html" %}
+{% endblock %} {% block body %} {% include "includes/_messages.html" %}
 
 <!-- Inner container -->
 
@@ -34,11 +32,23 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Username</label>
-                  <input type="text" value="{{user.username}}" class="form-control" id="username" name="username" />
+                  <input
+                    type="text"
+                    value="{{user.username}}"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                  />
                 </div>
                 <div class="col-md-6">
                   <label>First name</label>
-                  <input type="text" value="{{user.fname}}" class="form-control" id="fname" name="fname" />
+                  <input
+                    type="text"
+                    value="{{user.fname}}"
+                    class="form-control"
+                    id="fname"
+                    name="fname"
+                  />
                 </div>
               </div>
             </div>
@@ -47,11 +57,23 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Middle Name</label>
-                  <input type="text" value="{{user.mname}}" class="form-control" id="mname" name="mname" />
+                  <input
+                    type="text"
+                    value="{{user.mname}}"
+                    class="form-control"
+                    id="mname"
+                    name="mname"
+                  />
                 </div>
                 <div class="col-md-6">
                   <label>Last name</label>
-                  <input type="text" value="{{user.lname}}" class="form-control" id="lname" name="lname" />
+                  <input
+                    type="text"
+                    value="{{user.lname}}"
+                    class="form-control"
+                    id="lname"
+                    name="lname"
+                  />
                 </div>
               </div>
             </div>
@@ -60,11 +82,23 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Email</label>
-                  <input type="text" value="{{user.email}}" class="form-control" id="email" name="email" />
+                  <input
+                    type="text"
+                    value="{{user.email}}"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                  />
                 </div>
                 <div class="col-md-6">
                   <label>Phone</label>
-                  <input type="text" value="{{user.phone}}" class="form-control" id="phone" name="phone" />
+                  <input
+                    type="text"
+                    value="{{user.phone}}"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                  />
                 </div>
               </div>
             </div>
@@ -73,15 +107,33 @@
               <div class="row">
                 <div class="col-md-4">
                   <label>Branch</label>
-                  <input type="text" value="{{user.branch}}" class="form-control" id="branch" name="branch" />
+                  <input
+                    type="text"
+                    value="{{user.branch}}"
+                    class="form-control"
+                    id="branch"
+                    name="branch"
+                  />
                 </div>
                 <div class="col-md-4">
                   <label>Year</label>
-                  <input type="text" value="{{user.year}}" class="form-control" id="year" name="year" />
+                  <input
+                    type="text"
+                    value="{{user.year}}"
+                    class="form-control"
+                    id="year"
+                    name="year"
+                  />
                 </div>
                 <div class="col-md-4">
                   <label>Division</label>
-                  <input type="text" value="{{user.division}}" class="form-control" id="division" name="division" />
+                  <input
+                    type="text"
+                    value="{{user.division}}"
+                    class="form-control"
+                    id="division"
+                    name="division"
+                  />
                 </div>
               </div>
             </div>
@@ -91,7 +143,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Address</label>
-                  <input type="text" value="{{user.address}}" class="form-control" id="address" name="address" />
+                  <input
+                    type="text"
+                    value="{{user.address}}"
+                    class="form-control"
+                    id="address"
+                    name="address"
+                  />
                 </div>
                 <!-- <div class="col-md-6">
                             <label>Address line 2</label>
@@ -103,7 +161,13 @@
                           </div> -->
                 <div class="col-md-6">
                   <label>PRN #</label>
-                  <input type="text" value="{{user.prn}}" class="form-control" name="prn" id="prn" />
+                  <input
+                    type="text"
+                    value="{{user.prn}}"
+                    class="form-control"
+                    name="prn"
+                    id="prn"
+                  />
                 </div>
               </div>
             </div>
@@ -136,17 +200,18 @@
         </div>
 
         <div class="card-body">
-          <form action="#">
+          <form action="{{url_for('profile_step',step=2)}}" method="POST">
             <div class="form-group">
               <div class="row">
                 <div class="col-md-6">
                   <label>Username</label>
-                  <input type="text" value="Kopyov" readonly="readonly" class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                  <label>Current password</label>
-                  <input type="password" value="password" readonly="readonly" class="form-control" />
+                  <input
+                    type="text"
+                    value="{{user.username}}"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                  />
                 </div>
               </div>
             </div>
@@ -155,12 +220,24 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>New password</label>
-                  <input type="password" placeholder="Enter new password" class="form-control" />
+                  <input
+                    type="password"
+                    placeholder="Enter new password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                  />
                 </div>
 
                 <div class="col-md-6">
                   <label>Repeat password</label>
-                  <input type="password" placeholder="Repeat new password" class="form-control" />
+                  <input
+                    type="password"
+                    placeholder="Repeat new password"
+                    class="form-control"
+                    id="repassword"
+                    name="repassword"
+                  />
                 </div>
               </div>
             </div>
@@ -172,28 +249,49 @@
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" checked data-fouc />
+                      <input
+                        type="radio"
+                        name="visibility"
+                        class="form-input-styled"
+                        checked
+                        data-fouc
+                      />
                       Visible to everyone
                     </label>
                   </div>
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                      <input
+                        type="radio"
+                        name="visibility"
+                        class="form-input-styled"
+                        data-fouc
+                      />
                       Visible to friends only
                     </label>
                   </div>
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                      <input
+                        type="radio"
+                        name="visibility"
+                        class="form-input-styled"
+                        data-fouc
+                      />
                       Visible to my connections only
                     </label>
                   </div>
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" name="visibility" class="form-input-styled" data-fouc />
+                      <input
+                        type="radio"
+                        name="visibility"
+                        class="form-input-styled"
+                        data-fouc
+                      />
                       Visible to my colleagues only
                     </label>
                   </div>
@@ -204,21 +302,36 @@
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
+                      <input
+                        type="checkbox"
+                        class="form-input-styled"
+                        checked
+                        data-fouc
+                      />
                       Password expiration notification
                     </label>
                   </div>
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
+                      <input
+                        type="checkbox"
+                        class="form-input-styled"
+                        checked
+                        data-fouc
+                      />
                       New message notification
                     </label>
                   </div>
 
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="checkbox" class="form-input-styled" checked data-fouc />
+                      <input
+                        type="checkbox"
+                        class="form-input-styled"
+                        checked
+                        data-fouc
+                      />
                       New task notification
                     </label>
                   </div>
@@ -248,23 +361,34 @@
 
   <!-- Right sidebar component -->
   <div
-    class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-right wmin-300 border-0 shadow-0 order-1 order-md-2 sidebar-expand-md">
+    class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-right wmin-300 border-0 shadow-0 order-1 order-md-2 sidebar-expand-md"
+  >
     <!-- Sidebar content -->
     <div class="sidebar-content">
       <!-- User card -->
       <div class="card">
         <div class="card-body text-center">
           <div class="card-img-actions d-inline-block mb-3">
-            <img class="img-fluid rounded-circle"
+            <img
+              class="img-fluid rounded-circle"
               src="{% if user.pro_pic is defined %}{{url_for('static',filename=user.pro_pic)}}{%else%}{{url_for('static',filename='global_assets/images/placeholders/placeholder.jpg')}}{% endif %}"
-              width="170" height="170" alt="" />
+              width="170"
+              height="170"
+              alt=""
+            />
             <div class="card-img-actions-overlay card-img rounded-circle">
-              <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
-                data-toggle="modal" data-target="#modal_iconified">
+              <a
+                href="#"
+                class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
+                data-toggle="modal"
+                data-target="#modal_iconified"
+              >
                 <i class="icon-plus3"></i>
               </a>
-              <a href="user_pages_profile.html"
-                class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+              <a
+                href="user_pages_profile.html"
+                class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2"
+              >
                 <i class="icon-link"></i>
               </a>
             </div>
@@ -274,12 +398,30 @@
           <span class="d-block text-muted">UX/UI designer</span>
 
           <div class="list-icons list-icons-extended mt-3">
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i
-                class="icon-google-drive"></i></a>
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i
-                class="icon-twitter"></i></a>
-            <a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i
-                class="icon-github"></i></a>
+            <a
+              href="#"
+              class="list-icons-item"
+              data-popup="tooltip"
+              title="Google Drive"
+              data-container="body"
+              ><i class="icon-google-drive"></i
+            ></a>
+            <a
+              href="#"
+              class="list-icons-item"
+              data-popup="tooltip"
+              title="Twitter"
+              data-container="body"
+              ><i class="icon-twitter"></i
+            ></a>
+            <a
+              href="#"
+              class="list-icons-item"
+              data-popup="tooltip"
+              title="Github"
+              data-container="body"
+              ><i class="icon-github"></i
+            ></a>
           </div>
         </div>
       </div>
@@ -308,7 +450,9 @@
               <a href="#" class="nav-link">
                 <i class="icon-cash3"></i>
                 Balance
-                <span class="text-muted font-size-sm font-weight-normal ml-auto">$1,430</span>
+                <span class="text-muted font-size-sm font-weight-normal ml-auto"
+                  >$1,430</span
+                >
               </a>
             </li>
             <li class="nav-item">
@@ -353,7 +497,13 @@
 </div>
 <!-- /inner container -->
 
-<div id="modal_iconified" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+<div
+  id="modal_iconified"
+  class="modal fade"
+  tabindex="-1"
+  style="display: none;"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -363,11 +513,15 @@
         <button type="button" class="close" data-dismiss="modal">×</button>
       </div>
 
-      <form action="{{url_for('upload_profile_image1',username=user.username)}}" method="POST"
-        enctype="multipart/form-data">
-
+      <form
+        action="{{url_for('upload_profile_image1',username=user.username)}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
         <div class="modal-body">
-          <div class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+          <div
+            class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0"
+          >
             <span class="font-weight-semibold">You have new picture!</span> But
             please upload in low quality.
             <button type="button" class="close" data-dismiss="alert">×</button>
@@ -378,9 +532,9 @@
 
             <input type="file" name="image" class="form-input-styled" />
 
-            <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size
-              1Mb</span>
-
+            <span class="form-text text-muted"
+              >Accepted formats: gif, png, jpg. Max file size 1Mb</span
+            >
           </div>
         </div>
 
