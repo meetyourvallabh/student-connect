@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+</head>
+
+<body>
+
+    <h1>API result</h1>
+    <hr>
+    <div id="data">
+
+    </div>
+
+
+
+    <script>
+
+
+
+        fetch('http://localhost:5000/attendance/api/',
+            {
+                credentials: 'omit',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + `{{ session.access_token }}`
+                    // 'Content-Type': 'application/json'
+                },
+
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                document.getElementById("data").innerHTML = "Logged in as " + data['logged_in_as'];
+            });
+    </script>
+</body>
+
+</html>

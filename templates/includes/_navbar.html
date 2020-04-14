@@ -122,7 +122,7 @@
 		</ul>
 
 		<span class="navbar-text ml-md-3 mr-md-auto">
-			<span class="badge bg-success">Online</span>
+			<span id="connection_status" class="badge bg-success">Online</span>
 		</span>
 
 		<ul class="navbar-nav">
@@ -329,13 +329,12 @@
 
 			<li class="nav-item dropdown dropdown-user">
 				<a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-					<img src="{{url_for('static',filename='global_assets/images/placeholders/placeholder.jpg')}}"
-						class="rounded-circle" alt="">
+					<img src="{{url_for('static',filename=session.pro_pic)}}" class="rounded-circle" alt="">
 					<span>{{session.fname}} {{session.lname}}</span>
 				</a>
 
 				<div class="dropdown-menu dropdown-menu-right">
-					<a href="#" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
+					<a href="{{url_for('profile')}}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
 					<a href="#" class="dropdown-item"><i class="icon-coins"></i> My balance</a>
 					<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span
 							class="badge badge-pill bg-blue ml-auto">58</span></a>

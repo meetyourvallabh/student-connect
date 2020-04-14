@@ -10,6 +10,10 @@ from attendance.routes import mod
 import face_recognition
 from PIL import Image
 from werkzeug.utils import secure_filename
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 
 
 
@@ -29,8 +33,13 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'developer@makeyourown.club'
 app.config['MAIL_PASSWORD'] = 'myocoo@123'
 
+
+
 mongo = PyMongo(app)
 mail = Mail(app)
+jwt = JWTManager(app)
+
+
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
@@ -40,6 +49,8 @@ def allowed_file(filename):
 
 def random_chars(y):
     return ''.join(choice(string.ascii_letters) for x in range(y))
+
+
 
 
 
@@ -93,11 +104,14 @@ def login():
                         session['email']=found_user['email']
                         session['year']=found_user['year']
                         session['branch']=found_user['branch']
+                        if 'pro_pic' in found_user:
+                            session['pro_pic']=found_user['pro_pic']
                         session['logged_in']=True
 
                         
 
                         flash('Login Successfull','success')
+                        session['access_token'] = create_access_token(identity=username,expires_delta=False)
                         return redirect(url_for('index'))
                     else:
                         flash('Your Email is not verified yet, Please Do email verification by using link provided in mail','secondary')
@@ -109,10 +123,15 @@ def login():
                     session['lname'] = found_user['lname']
                     session['type'] = found_user['type']
                     session['email']=found_user['email']
+                    
+                    if 'pro_pic' in found_user:
+                            session['pro_pic']=found_user['pro_pic']
+
                     session['logged_in']=True
                     if found_user['type'] in ['hod','mentor']:
                             session['branch'] = found_user['branch']
                     flash('Login Successfull','success')
+                    session['access_token'] = create_access_token(identity=username,expires_delta=False)
                     return redirect(url_for('index'))
             else:
                 flash('Wrong Password','danger')
@@ -409,6 +428,9 @@ def upload_profile_image(username):
         users.update_one({'username':username},{'$set':{'pro_pic':'student/'+username+'/'+file.filename}})
         flash('Profile Image uploaded succesfully','success')
     return redirect(url_for('profile'))
+
+
+
 
 
 

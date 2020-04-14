@@ -1,5 +1,5 @@
 <!-- Main sidebar -->
-<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+<div class="sidebar sidebar-dark sidebar-main sidebar-fixed sidebar-expand-md">
 
         <!-- Sidebar mobile toggler -->
         <div class="sidebar-mobile-toggler text-center">
@@ -23,7 +23,7 @@
                         <div class="card-body">
                                 <div class="media">
                                         <div class="mr-3">
-                                                <a href="#"><img src="../../static/global_assets/images/placeholders/placeholder.jpg"
+                                                <a href="#"><img src="{{url_for('static',filename=session.pro_pic)}}"
                                                                 width="38" height="38" class="rounded-circle"
                                                                 alt=""></a>
                                         </div>
@@ -122,19 +122,21 @@
 
 
 <script>
+        function set_active_link() {
+                var active_link = `{% if url_for(request.endpoint).endswith('/') %}{{ url_for(request.endpoint) }}{% else %}{{ url_for(request.endpoint) }}{% endif %}`;
 
-        var active_link = `{% if url_for(request.endpoint).endswith('/') %}{{ url_for(request.endpoint) }}{% else %}{{ url_for(request.endpoint) }}{% endif %}`;
-
-        //alert(active_link);
-        var element = document.getElementById(active_link);
-        //element.classList.add("active");
-        //alert(element.className);
+                //alert(active_link);
+                var element = document.getElementById(active_link);
+                //element.classList.add("active");
+                //alert(element.className);
 
 
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        element.className += " active";
+                var current = document.getElementsByClassName("active");
+                current[0].className = current[0].className.replace(" active", "");
+                element.className += " active";
+        }
 
+        set_active_link()
 
 
 </script>

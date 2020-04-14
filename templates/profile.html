@@ -168,12 +168,14 @@
             <div class="row">
               <div class="col-md-6">
                 <label>New password</label>
-                <input type="password" placeholder="Enter new password" class="form-control" id="password" name="password"/>
+                <input type="password" placeholder="Enter new password" class="form-control" id="password"
+                  name="password" />
               </div>
 
               <div class="col-md-6">
                 <label>Repeat password</label>
-                <input type="password" placeholder="Repeat new password" class="form-control" id="repassword" name="repassword"/>
+                <input type="password" placeholder="Repeat new password" class="form-control" id="repassword"
+                  name="repassword" />
               </div>
             </div>
           </div>
@@ -283,8 +285,8 @@
           </div>
         </div>
 
-        <h6 class="font-weight-semibold mb-0">Hanna Dorman</h6>
-        <span class="d-block text-muted">UX/UI designer</span>
+        <h6 class="font-weight-semibold mb-0">{{user.fname}} {{user.lname}}</h6>
+        <span class="d-block text-muted">{{user.type}}</span>
 
         <div class="list-icons list-icons-extended mt-3">
           <a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i

@@ -33,6 +33,29 @@
     <!-- /main content -->
 
   </div>
+  <script>
+    window.addEventListener('load', function (e) {
+      status_button = document.getElementById("connection_status");
+      if (navigator.onLine) {
+        status_button.className = status_button.className.replace("bg-danger", "bg-success");
+        status_button.innerHTML = "Online"
+
+      } else {
+        status_button.className = status_button.className.replace("bg-success", "bg-danger");
+        status_button.innerHTML = "Offline"
+      }
+    }, false);
+
+    window.addEventListener('online', function (e) {
+      status_button.className = status_button.className.replace("bg-danger", "bg-success");
+      status_button.innerHTML = "Online"
+    }, false);
+
+    window.addEventListener('offline', function (e) {
+      status_button.className = status_button.className.replace("bg-success", "bg-danger");
+      status_button.innerHTML = "Offline"
+    }, false);
+  </script>
 </body>
 
 </html>
