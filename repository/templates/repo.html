@@ -1,0 +1,356 @@
+{% extends "layout.html" %} {% block body %} Repo
+<!-- <script src="{{url_for('static',filename='assets/js/app.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/extra_trees.js')}}"></script> -->
+<!-- <script src="assets/js/app.js"></script>
+<script src="../../../../global_assets/js/demo_pages/extra_trees.js"></script> -->
+
+<!-- Main content -->
+<div class="content-wrapper">
+    <!-- card 2 -->
+    <div class="row">
+        <div class="col-4 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="treeview-animated w-20 border mx-4 my-4">
+                        <h6 class="pt-3 pl-3">Folders</h6>
+                        <hr>
+                        <ul class="treeview-animated-list mb-3">
+                            <li class="treeview-animated-items">
+                                <a class="closed">
+                                    <i class="fas fa-angle-right"></i>
+                                    <span ondblclick="testclk()"><i
+                                            class="far fa-envelope-open ic-w mx-1"></i>Mail</span>
+                                </a>
+                                <ul class="nested">
+                                    <li>
+                                        <div class="treeview-animated-element" ondblclick="testclk()"><i
+                                                class="far fa-bell ic-w mr-1"></i>Offers
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-address-book ic-w mr-1"></i>Contacts
+                                    </li>
+                                    <li class="treeview-animated-items">
+                                        <a class="closed"><i class="fas fa-angle-right"></i>
+                                            <span><i class="far fa-calendar-alt ic-w mx-1"></i>Calendar</span></a>
+                                        <ul class="nested">
+                                            <li>
+                                                <div class="treeview-animated-element"><i
+                                                        class="far fa-clock ic-w mr-1"></i>Deadlines
+                                            </li>
+                                            <li>
+                                                <div class="treeview-animated-element"><i
+                                                        class="fas fa-users ic-w mr-1"></i>Meetings
+                                            </li>
+                                            <li>
+                                                <div class="treeview-animated-element"><i
+                                                        class="fas fa-basketball-ball ic-w mr-1"></i>Workouts
+                                            </li>
+                                            <li>
+                                                <div class="treeview-animated-element"><i
+                                                        class="fas fa-mug-hot ic-w mr-1"></i>Events
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="treeview-animated-items">
+                                <a class="closed">
+                                    <i class="fas fa-angle-right"></i>
+                                    <span><i class="far fa-folder-open ic-w mx-1"></i>Inbox</span>
+                                </a>
+                                <ul class="nested">
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-folder-open ic-w mr-1"></i>Admin
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-folder-open ic-w mr-1"></i>Corporate
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-folder-open ic-w mr-1"></i>Finance
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-folder-open ic-w mr-1"></i>Other
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="treeview-animated-items">
+                                <a class="closed">
+                                    <i class="fas fa-angle-right"></i>
+                                    <span><i class="far fa-gem mx-1"></i>Favourites</span>
+                                </a>
+                                <ul class="nested">
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="fas fa-pepper-hot ic-w mr-1"></i>Restaurants
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="far fa-eye ic-w mr-1"></i>Places
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="fas fa-gamepad ic-w mr-1"></i>Games
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="fas fa-cocktail ic-w mr-1"></i>Coctails
+                                    </li>
+                                    <li>
+                                        <div class="treeview-animated-element"><i
+                                                class="fas fa-pizza-slice ic-w mr-1"></i>Food
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="treeview-animated-element"><i class="far fa-comment ic-w mr-1"></i>Notes
+                            </li>
+                            <li>
+                                <div class="treeview-animated-element"><i class="fas fa-cogs ic-w mr-1"></i>Settings
+                            </li>
+                            <li>
+                                <div class="treeview-animated-element"><i class="fas fa-desktop ic-w mr-1"></i>Devices
+                            </li>
+                            <li>
+                                <div class="treeview-animated-element"><i class="fas fa-trash-alt ic-w mr-1"></i>Deleted
+                                    Items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8 card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th scope="row"><i class="far fa-folder-open fa-2x"></i></th>
+                        <td>
+                            <a href="{{url_for('test')}}">
+                                Mark
+                            </a>
+                        </td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope=" row"><i class="far fa-folder"></i></th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><i class="fas fa-file-word"></i></th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% macro dir(name, value='', type='text', size=20) -%}
+    <a class="closed">
+        <i class="fas fa-angle-right"></i>
+        <span ondblclick="testclk()"><i class="far fa-envelope-open ic-w mx-1"></i>{{name}}</span>
+    </a>
+    {%- endmacro %}
+    {% macro file(name, value='', type='text', size=20) -%}
+    <li>
+        <div class="treeview-animated-element" ondblclick="testclk()"><i class="far fa-bell ic-w mr-1"></i>{{name}}
+    </li>
+    {%- endmacro %}
+    {% macro file_tags(name, value='', type='text', size=20) -%}
+    <li>
+        <div class="treeview-animated-element" ondblclick="testclk()"><i class="far fa-bell ic-w mr-1"></i>{{name}}
+    </li>
+    {%- endmacro %}
+
+    {% macro dir_tags(name, value='', type='text', size=20) -%}
+    <li class="treeview-animated-items">
+        {%- endmacro %}
+
+        <div class="row">
+            <div class="col-4 ">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="treeview-animated w-20 border mx-4 my-4">
+                            <h6 class="pt-3 pl-3">Folders</h6>
+                            <hr>
+                            <ul class="treeview-animated-list mb-3">
+                                <li class="treeview-animated-items">
+                                    {{dir('mandar')}}
+                                    <ul class="nested">
+                                        {{ file('offers') }}
+                                        {{ file('contacts') }}
+                                        <li class="treeview-animated-items">
+                                            {{ dir('calendar') }}
+                                            <ul class="nested">
+                                                {{ file('Deadlines') }}
+                                                {{ file('Meetings') }}
+                                                {{ file('Workouts') }}
+                                                {{ file('Events') }}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="treeview-animated-items">
+                                    {{ dir('Inbox') }}
+                                    <ul class="nested">
+                                        {{ file('Admin') }}
+                                        {{ file('Corporate') }}
+                                        {{ file('Finance') }}
+                                        {{ file('Other') }}
+                                    </ul>
+                                </li>
+                                <li class="treeview-animated-items">
+                                    {{ dir('Favourites') }}
+                                    <ul class="nested">
+                                        {{ file('Restaurants') }}
+                                        {{ file('Places') }}
+                                        {{ file('Games') }}
+                                        {{ file('Coctails') }}
+                                        {{ file('Food') }}
+                                    </ul>
+                                </li>
+                                {{ file('Notes') }}
+                                {{ file('Settings') }}
+                                {{ file('Devices') }}
+                                {{ file('Deleted') }}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 card">
+
+                {#
+                    {% for key in trees%}
+                    {{key}}
+                    <br>
+                    {%endfor%}
+                #}
+
+
+
+
+
+
+                <!--  -->
+                {#
+                    {{trees}}
+                    <br>
+                    {{trees['sub1']}}
+                    <br>
+                    {% for key in trees%}
+                    key==={{key}}
+                    value==={{trees[key]}}
+                    {% if trees[key] != 'file' %}
+                    {{mdebug('not file', trees[key])}}
+                    <li class="treeview-animated-items">
+                        {{dir('mandar')}}
+                        <ul class="nested">
+                            {% endif%}
+                            {% if trees['key'] == 'file' %}
+                            {{mdebug('file',trees[key])}}
+                            {{ file('mandar') }}
+                            {% endif%}
+                            {% endfor %}
+                            <br>
+                            
+                            {{mdebug(key,"dict")}}
+                            #}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">File</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Handle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for keys in trees %}
+                        <tr data-href="{{url_for('test')}}">
+
+                            <th scope="row"><i class="far fa-folder-open fa-2x"></i></th>
+                            <td>
+                                <a href="{{url_for('test')}}">
+                                    Mark
+                                </a>
+                            </td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr data-href="www.google.com">
+                            <th scope=" row"><i class="far fa-folder"></i></th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="fas fa-file-word"></i></th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- testing -->
+        <h1>Upload new File</h1>
+        <form method="POST" action="{{url_for('repository.test')}}" enctype="multipart/form-data">
+            <input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+        <h1>remove new File</h1>
+        <form method="POST" action="{{url_for('repository.delete_file')}}" enctype="multipart/form-data">
+            <input type=text name=filename>
+            <input type=submit value=delete>
+        </form>
+</div>
+<script>
+    // Treeview Initialization
+    $(document).ready(function () {
+        $('.treeview-animated').mdbTreeview();
+    });
+
+    var testclk = () => {
+        console.log("double click")
+    }
+
+    var test = `{{name}}`
+    console.log(test)
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll('tr[data-href]');
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.dataset.href;
+            })
+            row.addEventListener("onmouseover", () => {
+                row.style.color = "blue";
+            })
+        });
+    })
+
+
+</script>
+
+{% endblock %}
