@@ -1,0 +1,20 @@
+{% macro active_exact_link(endpoint) %}
+{% if endpoint == request.path %}
+active
+{% endif %}
+{% endmacro %}
+
+
+
+{% macro active_in_link(endpoint) %}
+{% if endpoint in request.path %}
+active
+{% endif %}
+{% endmacro %}
+
+
+{% macro expand_nav_if(endpoint) %}
+{% if endpoint in request.path %}
+nav-item-expanded nav-item-open
+{% endif %}
+{% endmacro %}

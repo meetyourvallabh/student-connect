@@ -1,41 +1,180 @@
 {% extends "layout.html" %}
+{% block head %}
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/form_layouts.js')}}"></script>
+
+
+{% endblock %}
+
 
 {% block body %}
 
-<div class="card">
-    <div class="card-header">
-        <h5>Take Attendance</h5>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-6">
-                <a href="">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <i class="icon-redo mr-3 icon-2x"></i>
-                                <div>Automatic <div class="opacity-50">Just click a picture</div>
-                                </div>
-                            </div>
-                        </div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        {% include "includes/_messages.html" %}
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h5 class="card-title">Create lecture attendance</h5>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+
                     </div>
-                </a>
+                </div>
             </div>
 
-            <div class="col-sm-6">
-                <a href="">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <i class="icon-flip-vertical4 mr-3 icon-2x"></i>
-                                <div>Manual <div class="opacity-50">Swipe Left/Right</div>
-                                </div>
+            <div class="card-body">
+                <form action="{{url_for('attendance.create_attendance')}}" method="POST">
+                    <fieldset>
+                        <legend class="font-weight-semibold text-uppercase font-size-sm">
+                            <i class="icon-file-text2 mr-2"></i>
+                            Class Details
+                            <a href="#" class="float-right text-default" data-toggle="collapse" data-target="#demo1">
+                                <i class="icon-circle-down2"></i>
+                            </a>
+                        </legend>
+
+                        <div class="collapse show" id="demo1">
+                            <div class="form-group">
+                                <label>Year:</label>
+                                <select required name="year" data-placeholder="Select year"
+                                    class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
+                                    tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <option value="FE">FE</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TE">TE</option>
+                                    <option value="BE">BE</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Branch:</label>
+                                <select required name="branch" data-placeholder="Select branch"
+                                    class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
+                                    tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <option value="IT">IT</option>
+                                    <option value="computer">Computer</option>
+                                    <option value="electrical">Electrical</option>
+                                    <option value="mechanical">Mechanical</option>
+                                    <option value="entc">EnTC</option>
+                                    <option value="civil">Civil</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Division:</label>
+                                <select required name="division" data-placeholder="Select division"
+                                    class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
+                                    tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+
+                                </select>
                             </div>
                         </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend class="font-weight-semibold text-uppercase font-size-sm">
+                            <i class="icon-reading mr-2"></i>
+                            Add lecture details
+                            <a class="float-right text-default" data-toggle="collapse" data-target="#demo2">
+                                <i class="icon-circle-down2"></i>
+                            </a>
+                        </legend>
+
+                        <div class="collapse show" id="demo2">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="">Start Time</label>
+                                        <input id="start_time" name="start_time" class="form-control" type="time"
+                                            name="start_time" value="{{time.start_time}}:00">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="">End Time</label>
+                                        <input id="end_time" name="end_time" class="form-control" type="time"
+                                            name="end_time" value="{{time.end_time}}:00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input class="form-control" type="date" value="{{date}}" name="date">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Subject:</label>
+                                <select name="subject" data-placeholder="Select subject"
+                                    class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
+                                    tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <option value="ML">Machine Learning</option>
+                                    <option value="OS">Operating System</option>
+                                    <option value="DBMS">DBMS</option>
+                                    <option value="DCS">DCS</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Classroom:</label>
+                                <select name="classroom" data-placeholder="Select classroom number"
+                                    class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
+                                    tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <optgroup label="First Floor">
+                                        {% for room_no in range(100,151) %}
+                                        <option value="{{room_no}}">{{room_no}}</option>
+
+                                        {% endfor %}
+                                    </optgroup>
+                                    <optgroup label="Second Floor">
+                                        {% for room_no in range(200,251) %}
+                                        <option value="{{room_no}}">{{room_no}}</option>
+
+                                        {% endfor %}
+                                    </optgroup>
+                                    <optgroup label="Third Floor">
+                                        {% for room_no in range(300,351) %}
+                                        <option value="{{room_no}}">{{room_no}}</option>
+
+                                        {% endfor %}
+                                    </optgroup>
+                                    <optgroup label="Fourth Floor">
+                                        {% for room_no in range(400,451) %}
+                                        <option value="{{room_no}}">{{room_no}}</option>
+
+                                        {% endfor %}
+                                    </optgroup>
+
+                                </select>
+                            </div>
+
+
+                        </div>
+                    </fieldset>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Submit form <i
+                                class="icon-paperplane ml-2"></i></button>
                     </div>
-                </a>
+                </form>
             </div>
         </div>
+
+    </div>
+    <div class="col-md-6">
 
     </div>
 </div>

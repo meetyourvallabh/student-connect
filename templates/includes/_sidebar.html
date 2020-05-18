@@ -1,3 +1,4 @@
+{% from "includes/_macros.html" import active_in_link,active_exact_link,expand_nav_if with context %}
 <!-- Main sidebar -->
 <div class="sidebar sidebar-dark sidebar-main sidebar-fixed sidebar-expand-md">
 
@@ -56,7 +57,8 @@
                                                 class="icon-menu" title="Main"></i>
                                 </li>
                                 <li class="nav-item">
-                                        <a href="{{url_for('index')}}" id="/" class="nav-link active">
+                                        <a href="{{url_for('index')}}" id="/"
+                                                class="nav-link {{active_exact_link('/')}}">
                                                 <i class="icon-home4"></i>
                                                 <span>
                                                         Home
@@ -64,7 +66,8 @@
                                         </a>
                                 </li>
                                 <li class="nav-item">
-                                        <a href="{{url_for('profile')}}" id="/profile/" class="nav-link">
+                                        <a href="{{url_for('profile')}}" id="/profile/"
+                                                class="nav-link {{active_in_link('profile')}}">
                                                 <i class="icon-profile"></i>
                                                 <span>
                                                         Profile
@@ -73,18 +76,22 @@
                                 </li>
 
 
-                                <li class="nav-item nav-item-submenu">
-                                        <a href="#" id="/attendance/" class="nav-link"><i class="icon-copy"></i>
+                                <li class="nav-item nav-item-submenu {{expand_nav_if('attendance')}}">
+                                        <a href="#" id="/attendance/"
+                                                class="nav-link {{active_in_link('attendance')}}"><i
+                                                        class="icon-copy"></i>
                                                 <span>Attendance
                                                         System</span></a>
 
                                         <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                                                 <li class="nav-item"><a id="/attendance/"
                                                                 href="{{url_for('attendance.index')}}"
-                                                                class="nav-link active">Attendance Dashboard</a></li>
+                                                                class="nav-link {{active_exact_link('/attendance/')}}">Attendance
+                                                                Dashboard</a></li>
                                                 <li class="nav-item"><a id="/attendance/automatic/"
                                                                 href="{{url_for('attendance.automatic')}}"
-                                                                class="nav-link">Automatic</a></li>
+                                                                class="nav-link {{active_in_link('automatic')}}">Automatic</a>
+                                                </li>
 
 
                                                 <li class="nav-item"><a id="/attendance/manual/" href="#"
@@ -123,9 +130,9 @@
 
 <script>
         function set_active_link() {
-                var active_link = `{% if url_for(request.endpoint).endswith('/') %}{{ url_for(request.endpoint) }}{% else %}{{ url_for(request.endpoint) }}{% endif %}`;
+                var active_link = `{% if request.path.endswith('/') %}{{ request.path }}{% else %}{{ request.path }}/{% endif %}`;
 
-                //alert(active_link);
+                alert(active_link);
                 var element = document.getElementById(active_link);
                 //element.classList.add("active");
                 //alert(element.className);
@@ -136,7 +143,7 @@
                 element.className += " active";
         }
 
-        set_active_link()
+        //set_active_link()
 
 
 </script>

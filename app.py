@@ -1,12 +1,12 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, session
-from flask_pymongo import PyMongo
+from database import mongo
 from random import *
 import bcrypt
 from flask_mail import Mail, Message
 from functools import wraps
 import os
 import datetime, string
-from attendance.routes import mod
+
 import face_recognition
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -23,8 +23,8 @@ from flask_jwt_extended import (
 
 app = Flask(__name__)
 
-app.register_blueprint(mod,url_prefix='/attendance')
 
+# App configurations here!
 app.config['MONGO_DBNAME'] = 'students_connect'
 app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/students_connect'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -35,9 +35,16 @@ app.config['MAIL_PASSWORD'] = 'myocoo@123'
 
 
 
-mongo = PyMongo(app)
+# App initializations here!
 mail = Mail(app)
-jwt = JWTManager(app)
+jwt = JWTManager(app) # JWT
+mongo.init_app(app) # Mongo
+
+
+#BLUE PRINTS
+from attendance import attendance
+app.register_blueprint(attendance.app,url_prefix='/attendance')
+
 
 
 
@@ -53,6 +60,8 @@ def random_chars(y):
 
 
 
+
+#MIDDLEWARES
 
 # Check if user logged in
 def is_logged_in(f):
