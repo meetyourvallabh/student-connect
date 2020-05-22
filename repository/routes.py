@@ -1,6 +1,26 @@
 from flask import Blueprint, render_template, request, session
 import os
+import time
 repo = Blueprint('repository', __name__,template_folder='templates')
+
+def gettime(path_):
+	file_token = ''
+	all_time={}
+	for root, dirs, files in os.walk(path_):
+		for d in dirs:
+			try: 
+				temp = os.path.getmtime(root+"/"+d)
+				all_time[d] = time.ctime(temp)
+			except OSError: 
+				all_time[d] = "Unknown"
+		
+		for f in files:
+			try: 
+				temp = os.path.getmtime(root+"/"+f) 
+				all_time[f] = time.ctime(temp)
+			except OSError: 
+				all_time[f] = "Unknown"	
+	return all_time
 
 @repo.context_processor
 def utility_functions():
@@ -12,6 +32,9 @@ def utility_functions():
 
 @repo.route('/')
 def index():
+	session['main_path'] = 'static/student/mandar2'
+	session['current_path'] = 'static/student/mandar2'
+	
 	name = "mandar"
 	file_st = {}
 	currentpath=[]
@@ -21,17 +44,6 @@ def index():
 		current_dir = currentpath
 		sub_dirs = dirs
 		current_files = files
-		# print(f'path={currentpath}')
-		# print(f'dirs={dirs}')
-		# print(f'files={files}')
-		# for f in files:
-			# print(f)
-		# print(session['email'])
-	# print(os.listdir('static/student/mandar'))
-		# if currentpath 
-		# file_st['current_path'] = dirs
-		# file_st['sub_dirs'] = dirs
-		# file_st['current_files'] = files
 	
 	def fs_tree_to_dict(path_):
 		file_token = ''
@@ -42,17 +54,9 @@ def index():
 				tree[f] = "file"
 			return tree  # note we discontinue iteration trough os.walk
 	tree = fs_tree_to_dict("static/student/mandar2")
-	print(f"tree={tree}")
-	# print(f'file_st = {file_st}')
-	# print(f'tree = {tree}')
-	print(type(tree))	
 	all_dirs = []
 	all_files = []
-	# for key in tree:
-	# 	print(f'key={key}')
-	# 	if tree[key] != 'file':
-	# 		all_dirs.append(key) 
-
+	
 	def find_dirs(tree):
 		for k, v in tree.items():
 			if isinstance(v, dict):
@@ -62,15 +66,63 @@ def index():
 				all_files.append(k) 
 
 	find_dirs(tree)
-	print(f"all_dirs={all_dirs}")
-	print(f"all_files={all_files}")
-	return render_template('repo.html',trees=tree,all_dirs=all_dirs)
+	all_time = gettime("static/student/mandar2")
+	return render_template('repo.html',trees=tree,all_dirs=all_dirs,all_time=all_time)
+
+def fs_tree_to_dict(path_):
+	file_token = ''
+	for root, dirs, files in os.walk(path_):
+		tree = {d: fs_tree_to_dict(os.path.join(root, d)) for d in dirs}
+		tree.update({f: file_token for f in files })
+		for f in files:
+			tree[f] = "file"
+		return tree  
 
 
+@repo.route('/next/<filepath>')
+def next(filepath):
+	current_path = session['current_path']
+	modified_time = ''
+	all_dirs = []	
+	all_files = []
+	
+	
+
+	def find_dirs(tree):
+		for k, v in tree.items():
+			if isinstance(v, dict):
+				all_dirs.append(k)
+				find_dirs(v)
+			else:
+				all_files.append(k) 
+
+		
+	all_time = gettime(session['current_path'])
+	if request.method == 'GET':
+		### when reloading after dir already loaded, paths are updatedm check if path already present 
+		if filepath in current_path: 
+			current_path = current_path.replace("/"+filepath,"")
+		main_tree =  fs_tree_to_dict(current_path)
+		print(f"main_tree={main_tree}")
+		find_dirs(main_tree)
+		if filepath in all_dirs: #display dir if dir
+			current_path = current_path+'/'+filepath
+			session['current_path'] = current_path
+			inside_dict =  fs_tree_to_dict(current_path)
+			find_dirs(inside_dict)
+			return render_template('repo.html',trees=inside_dict,all_dirs=all_dirs,all_time=all_time)
+
+		elif filepath in all_files : #display file with options
+			print(f'+_+_+_+_+_+_ this is {filepath}')
+			return render_template('repo.html')
+		else:
+			print('*******not working')
+			return render_template('repo.html')
 
 @repo.route('/test',methods=['POST','GET'])
 def test():
 	if request.method == 'GET':
+		
 		return render_template('upload.html')
 	elif request.method == 'POST':
 		# path = os.path.abspath('static/student/'+username)

@@ -3,6 +3,8 @@
 <script src="{{url_for('static',filename='global_assets/js/demo_pages/extra_trees.js')}}"></script> -->
 <!-- <script src="assets/js/app.js"></script>
 <script src="../../../../global_assets/js/demo_pages/extra_trees.js"></script> -->
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/user_pages_profile.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
 
 <!-- Main content -->
 <div class="content-wrapper">
@@ -187,6 +189,7 @@
             <div class="col-4 ">
                 <div class="card">
                     <div class="card-body">
+
                         <div class="treeview-animated w-20 border mx-4 my-4">
                             <h6 class="pt-3 pl-3">Folders</h6>
                             <hr>
@@ -276,40 +279,39 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col" id="backicon"><i class="" id="back"></i></th>
                             <th scope="col">File</th>
-                            <th scope="col">Last</th>
+                            <th scope="col">Last Modified</th>
                             <th scope="col">Handle</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for keys in trees %}
-                        <tr data-href="{{url_for('test')}}">
-
+                        {% for key in trees %}
+                        <tr data-href="{{url_for('repository.next',filepath=key)}}">
+                            {% if key in all_dirs%}
                             <th scope="row"><i class="far fa-folder-open fa-2x"></i></th>
+                            {% elif "xls" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-excel fa-2x"></i></th>
+                            {% elif "doc" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-word fa-2x"></i></th>
+                            {% elif "gif" in key.lower() or "png" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-image fa-2x"></i></th>
+                            {% else %}
+                            <th scope="row"><i class="far fa-file fa-2x"></i></th>
+                            {% endif %}
                             <td>
-                                <a href="{{url_for('test')}}">
-                                    Mark
-                                </a>
+                                {{key}}
                             </td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr data-href="www.google.com">
-                            <th scope=" row"><i class="far fa-folder"></i></th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><i class="fas fa-file-word"></i></th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
+                            <td>{{all_time[key]}}</td>
+                            <td>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#modal_iconified">Launch <i
+                        class="icon-play3 ml-2"></i></button>
+
             </div>
         </div>
 
@@ -325,6 +327,57 @@
             <input type=submit value=delete>
         </form>
 </div>
+<!-- Iconified modal -->
+<div id="modal_iconified" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="errormsg">
+                    <!-- <div
+                        class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                        <span class="font-weight-semibold">Here we go!</span> Example of an alert inside modal.
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div> -->
+                </div>
+
+                <h6 class="font-weight-semibold"><i class="icon-law mr-2"></i> Sample heading with icon</h6>
+                <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+                    eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+
+                <hr>
+                <form method="POST" action="url_for('test')" id="uploadform">
+                    <div>
+                        <label>Upload profile image</label>
+
+                        <input type="file" name="fileupload" id="fileupload" class="form-input-styled" multiple
+                            required />
+
+                        <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size
+                            1Mb</span>
+
+                    </div>
+
+                    <p><i class="icon-mention mr-2"></i> Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
+                        cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla
+                        non
+                        metus auctor fringilla.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+                    Close</button>
+                <button class="btn bg-primary"><i class="icon-checkmark3 font-size-base mr-1"></i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     // Treeview Initialization
     $(document).ready(function () {
@@ -338,18 +391,80 @@
     var test = `{{name}}`
     console.log(test)
 
+
+    // repo links and animation
     document.addEventListener("DOMContentLoaded", () => {
         const rows = document.querySelectorAll('tr[data-href]');
         rows.forEach(row => {
             row.addEventListener("click", () => {
+                console.log("click")
                 window.location.href = row.dataset.href;
             })
-            row.addEventListener("onmouseover", () => {
+            row.addEventListener("mouseover", () => {
                 row.style.color = "blue";
             })
+            row.addEventListener("mouseout", () => {
+                row.style.color = "black";
+            })
         });
+
+        repo_url = window.location.href;
+        url_arr = repo_url.split('/')
+        repo_index = url_arr.indexOf('repository')
+        if (url_arr[repo_index + 2] === undefined) {
+            // show #
+            back = document.getElementById('back');
+            back.classList.remove('fas', 'fa-arrow-left', 'fa-lg')
+            back.textContent = "#"
+        } else {
+            // show back arrow
+            back = document.getElementById('back');
+            back.classList.add('fas', 'fa-arrow-circle-left', 'fa-2x')
+            back.textContent = ""
+
+            backicon = document.getElementById('backicon');
+            backicon.addEventListener('click', () => {
+                window.location.href = 'http://localhost:5000/repository/';
+            });
+            backicon.addEventListener('mouseover', () => {
+                document.getElementById('backicon').style.color = "blue";
+            })
+
+            backicon.addEventListener('mouseout', () => {
+                document.getElementById('backicon').style.color = "black";
+            });
+        }
+
     })
 
+
+    // file validation
+    file_upload = document.getElementById("fileupload")
+
+    file_upload.addEventListener("change", event => {
+        const files = event.target.files
+        console.log(files)
+        files.forEach(file => {
+            console.log(file.size)
+            file_size = file.size / 1000 //convert to kb
+            if (file_size > 40000) { //file smaller than 40MB
+                error_tag = document.getElementById("errormsg")
+                error_tag.innerHTML = `<div
+                        class="alert alert-danger alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                        <span class="font-weight-semibold">File size should be smaller than 40MB</span><br>"${file.name}" greater than 40MB.
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>`
+                upload_form = document.getElementById("uploadform")
+                file_upload.value = null
+                console.log(upload_form)
+            } else {
+                upload_form = document.getElementById("uploadform")
+                upload_form.submit = true
+                console.log(upload_form.onsubmit)
+
+            }
+        })
+    })
 
 </script>
 
