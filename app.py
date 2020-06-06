@@ -15,7 +15,6 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 
-from repository.routes import repo
 
 
 # app = Flask(__name__,
@@ -24,8 +23,6 @@ from repository.routes import repo
 
 app = Flask(__name__)
 
-app.register_blueprint(mod,url_prefix='/attendance')
-app.register_blueprint(repo,url_prefix='/repository')
 
 # App configurations here!
 app.config['MONGO_DBNAME'] = 'students_connect'
@@ -46,7 +43,9 @@ mongo.init_app(app) # Mongo
 
 #BLUE PRINTS
 from attendance import attendance
+from repository.routes import repo
 app.register_blueprint(attendance.app,url_prefix='/attendance')
+app.register_blueprint(repo,url_prefix='/repository')
 
 
 
