@@ -412,14 +412,6 @@ def upload_profile_image(username):
         flash('Profile Image uploaded succesfully','success')
     return redirect(url_for('profile'))
 
-# repository
-
-
-@app.route('/test')
-def test():
-    print(f"current==={session['current_path']}")
-    print(f"main==={session['main_path']}")
-    return "test func"
 
 
 

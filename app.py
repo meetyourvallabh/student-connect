@@ -10,7 +10,7 @@ from attendance.routes import mod
 import face_recognition
 from PIL import Image
 from werkzeug.utils import secure_filename
-
+from repository.routes import repo
 
 
 # app = Flask(__name__,
@@ -20,6 +20,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 app.register_blueprint(mod,url_prefix='/attendance')
+app.register_blueprint(repo,url_prefix='/repository')
 
 app.config['MONGO_DBNAME'] = 'students_connect'
 app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/students_connect'

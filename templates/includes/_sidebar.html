@@ -20,14 +20,8 @@
       <div class="card-body">
         <div class="media">
           <div class="mr-3">
-            <a href="#"
-              ><img
-                src="../../static/global_assets/images/placeholders/placeholder.jpg"
-                width="38"
-                height="38"
-                class="rounded-circle"
-                alt=""
-            /></a>
+            <a href="#"><img src="../../static/global_assets/images/placeholders/placeholder.jpg" width="38" height="38"
+                class="rounded-circle" alt="" /></a>
           </div>
 
           <div class="media-body">
@@ -89,6 +83,12 @@
             </span>
           </a>
         </li>
+        <li class="nav-item">
+          <a type="button" class="nav-link" style="width: 200px;" data-toggle="modal" data-target="#modal_meeting">
+            <i class="icon-profile"></i>
+            <span>Video Meeting</span>
+          </a>
+        </li>
 
         <!-- /main -->
       </ul>
@@ -97,4 +97,54 @@
   </div>
   <!-- /sidebar content -->
 </div>
+<div id="modal_meeting" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Host New Meeting</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="errormsg">
+          <!-- <div
+                      class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                      <span class="font-weight-semibold">Here we go!</span> Example of an alert inside modal.
+                      <button type="button" class="close" data-dismiss="alert">×</button>
+                  </div> -->
+        </div>
+
+        <h6 class="font-weight-semibold"><i class="fas fa-video"></i> Meetings</h6>
+
+        <form method="POST" action="{{url_for('repository.videourl')}}" id="uploadform" enctype="multipart/form-data"
+          onsubmit="">
+          <div>
+            <label>Enter Meeting Name:</label>
+
+            <input type="text" name="meeting" id="meeting" class="form-input-styled" required />
+            <span class="form-text text-muted">Meeting Name should not contain: <b>\ / : * ? " <> |</b>
+            </span>
+
+          </div>
+          <hr>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+          Close</button>
+        <a class="btn bg-primary" id="link2" href=""><i class="icon-checkmark3 font-size-base mr-1"></i> Host</a>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  id = document.getElementById("meeting")
+  id.addEventListener("change", () => {
+    a = document.getElementById("link2")
+    a.href = "https://meet.vallabh.tech/" + id.value
+  })
+</script>
+
 <!-- /main sidebar -->
