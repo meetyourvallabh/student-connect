@@ -15,6 +15,7 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 
+from repository.routes import repo
 
 
 # app = Flask(__name__,
@@ -23,6 +24,8 @@ from flask_jwt_extended import (
 
 app = Flask(__name__)
 
+app.register_blueprint(mod,url_prefix='/attendance')
+app.register_blueprint(repo,url_prefix='/repository')
 
 # App configurations here!
 app.config['MONGO_DBNAME'] = 'students_connect'
@@ -30,8 +33,8 @@ app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/students_connect'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'developer@makeyourown.club'
-app.config['MAIL_PASSWORD'] = 'myocoo@123'
+app.config['MAIL_USERNAME'] = 'studentmandar@gmail.com'
+app.config['MAIL_PASSWORD'] = 'studentmandar@121'
 
 
 

@@ -3,3 +3,7 @@
 /sendgrid.env
 /__pycache__
 attendance/__pycache__
+.vscode/*
+layout_1/*
+static/student/mandar2/*
+app2.py

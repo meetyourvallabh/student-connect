@@ -1,0 +1,594 @@
+{% extends "layout.html" %} {% block body %}
+<!-- <script src="{{url_for('static',filename='assets/js/app.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/extra_trees.js')}}"></script> -->
+<!-- <script src="assets/js/app.js"></script>
+<script src="../../../../global_assets/js/demo_pages/extra_trees.js"></script> -->
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/user_pages_profile.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+
+<!-- Main content -->
+<div class="content-wrapper">
+    <!-- card 2 -->
+    {% macro dir(name, value='', type='text', size=20) -%}
+    <a class="closed">
+        <i class="fas fa-angle-right"></i>
+        <span ondblclick="testclk()"><i class="far fa-envelope-open ic-w mx-1"></i>{{name}}</span>
+    </a>
+    {%- endmacro %}
+    {% macro file(name, value='', type='text', size=20) -%}
+    <li>
+        <div class="treeview-animated-element" ondblclick="testclk()"><i class="far fa-bell ic-w mr-1"></i>{{name}}
+    </li>
+    {%- endmacro %}
+    {% macro file_tags(name, value='', type='text', size=20) -%}
+    <li>
+        <div class="treeview-animated-element" ondblclick="testclk()"><i class="far fa-bell ic-w mr-1"></i>{{name}}
+    </li>
+    {%- endmacro %}
+
+    {% macro dir_tags(name, value='', type='text', size=20) -%}
+    <li class="treeview-animated-items">
+        {%- endmacro %}
+
+        <div class="row">
+            <div class="col-4 ">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="treeview-animated w-20 border mx-4 my-4">
+                            <h6 class="pt-3 pl-3">Folders</h6>
+                            <hr>
+                            <ul class="treeview-animated-list mb-3">
+                                <li class="treeview-animated-items">
+                                    {{dir('mandar')}}
+                                    <ul class="nested">
+                                        {{ file('offers') }}
+                                        {{ file('contacts') }}
+                                        <li class="treeview-animated-items">
+                                            {{ dir('calendar') }}
+                                            <ul class="nested">
+                                                {{ file('Deadlines') }}
+                                                {{ file('Meetings') }}
+                                                {{ file('Workouts') }}
+                                                {{ file('Events') }}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="treeview-animated-items">
+                                    {{ dir('Inbox') }}
+                                    <ul class="nested">
+                                        {{ file('Admin') }}
+                                        {{ file('Corporate') }}
+                                        {{ file('Finance') }}
+                                        {{ file('Other') }}
+                                    </ul>
+                                </li>
+                                <li class="treeview-animated-items">
+                                    {{ dir('Favourites') }}
+                                    <ul class="nested">
+                                        {{ file('Restaurants') }}
+                                        {{ file('Places') }}
+                                        {{ file('Games') }}
+                                        {{ file('Coctails') }}
+                                        {{ file('Food') }}
+                                    </ul>
+                                </li>
+                                {{ file('Notes') }}
+                                {{ file('Settings') }}
+                                {{ file('Devices') }}
+                                {{ file('Deleted') }}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 card">
+
+                {#
+                    {% for key in trees%}
+                    {{key}}
+                    <br>
+                    {%endfor%}
+                #}
+
+
+
+
+
+
+                <!--  -->
+                {#
+                    {{trees}}
+                    <br>
+                    {{trees['sub1']}}
+                    <br>
+                    {% for key in trees%}
+                    key==={{key}}
+                    value==={{trees[key]}}
+                    {% if trees[key] != 'file' %}
+                    {{mdebug('not file', trees[key])}}
+                    <li class="treeview-animated-items">
+                        {{dir('mandar')}}
+                        <ul class="nested">
+                            {% endif%}
+                            {% if trees['key'] == 'file' %}
+                            {{mdebug('file',trees[key])}}
+                            {{ file('mandar') }}
+                            {% endif%}
+                            {% endfor %}
+                            <br>
+                            
+                            {{mdebug(key,"dict")}}
+                            #}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" id="backicon"><i class="" id="back"></i></th>
+                            <th scope="col">File</th>
+                            <th scope="col">Last Modified</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key in trees %}
+                        {% if key in all_dirs%}
+                        <tr data-href="{{url_for('repository.next',filepath=key)}}">
+                            {% else %}
+                        <tr data-href="{{url_for('repository.options',file=key)}}">
+                            {% endif %}
+                            {% if key in all_dirs%}
+                            <th scope="row"><i class="far fa-folder-open fa-2x"></i></th>
+                            {% elif "xls" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-excel fa-2x"></i></th>
+                            {% elif "doc" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-word fa-2x"></i></th>
+                            {% elif "gif" in key.lower() or "png" in key.lower() %}
+                            <th scope="row"><i class="far fa-file-image fa-2x"></i></th>
+                            {% else %}
+                            <th scope="row"><i class="far fa-file fa-2x"></i></th>
+                            {% endif %}
+                            <td>
+                                {{key}}
+                            </td>
+                            <td>{{all_time[key]}}</td>
+                            <td id="deleteicon" data-deletelink="{{key}}">
+                                {% if key in all_dirs%}
+                                <a class="btn btn-danger btn-sm" id="deletetag" data-target="#modal_deletefile"
+                                    onclick="" href="{{url_for('repository.delete_file',filename=key)}}">Delete</a>
+
+                                {% else %}
+                                <a class="btn btn-primary btn-sm" id="deletetag" data-target="" onclick=""
+                                    href="{{url_for('repository.options',file=key)}}">Options</a>
+                                {%endif%}
+                            </td>
+                        </tr>
+                        <!-- href="{{url_for('repository.delete_file',filename=key)}}" -->
+                        {% set new_key = key%}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="display: inline;">
+                    <button type="button" class="btn btn-primary" style="width: 200px;" data-toggle="modal"
+                        data-target="#modal_iconified">Upload File <i class="fas fa-upload fa-1x"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary" style="width: 200px;" data-toggle="modal"
+                        data-target="#modal_newfolder">New Folder <i class="fas fa-folder-plus fa-1x"></i>
+                    </button>
+                    {#<!-- <a type="button" class="btn btn-primary" href="{{url_for('repository.share',file=new_key)}}"
+                        style="width: 200px;" data-toggle="" data-target="">Share<i
+                            class="fas fa-folder-plus fa-1x"></i>
+                    </a> -->#}
+                </div>
+
+            </div>
+        </div>
+
+
+
+</div>
+
+<!-- ------------------------------------------- -->
+<!-- Upload  modal -->
+<div id="modal_iconified" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="errormsgupload">
+
+                </div>
+
+                <h6 class="font-weight-semibold"><i class="fas fa-upload fa-1x"></i>Upload files</h6>
+
+                <form method="POST" action="{{url_for('repository.insert_file')}}" id="uploadform"
+                    enctype="multipart/form-data" onsubmit="">
+                    <div>
+                        <label>Upload profile image</label>
+
+                        <input type="file" name="fileupload" id="fileupload" class="form-input-styled" multiple
+                            required />
+
+                        <span class="form-text text-muted">Accepted Size: <b>Max file size 40MB</b></span>
+
+                    </div>
+                    <hr>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+                    Close</button>
+                <button class="btn bg-primary"><i class="icon-checkmark3 font-size-base mr-1"></i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Newflolder modal -->
+<div id="modal_newfolder" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="errormsg2">
+
+                </div>
+
+                <h6 class="font-weight-semibold"><i class="fas fa-folder-plus fa-1x"></i> Create New Folder</h6>
+                <form method="POST" action="{{url_for('repository.insert_folder')}}" id="newfolderform"
+                    enctype="multipart/form-data" onsubmit="">
+                    <div>
+                        <label>New Folder Name:</label>
+
+                        <input type="text" name="foldername" id="foldername" class="form-input-styled" required />
+                        <span class="form-text text-muted">Folder Name should not contain: <b>\ / : * ? " <> |</b>
+                        </span>
+                        <hr>
+
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+                    Close</button>
+                <button class="btn bg-primary"><i class="icon-checkmark3 font-size-base mr-1"></i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete file modal -->
+<div id="modal_deletefile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Delete File</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="errormsg2">
+
+                </div>
+
+                <h6 class="font-weight-semibold"><i class="fas fa-folder-plus fa-1x"></i>Delte File!</h6>
+                <p class="text-warning">Files deleted cannot be restored!!</p>
+                <form method="POST" action="{{url_for('repository.insert_folder')}}" id="newfolderform"
+                    enctype="multipart/form-data" onsubmit="">
+                    <div>
+                        <label>New Folder Name:</label>
+
+                        <input type="text" name="foldername" id="foldername" class="form-input-styled" required />
+                        <span class="form-text text-muted">Folder Name should not contain: <b>\ / : * ? " <> |</b>
+                        </span>
+                        <hr>
+
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+                    Close</button>
+                <button class="btn bg-primary"><i class="icon-checkmark3 font-size-base mr-1"></i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+
+<div id="modal_meeting" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="errormsg">
+                    <!-- <div
+                        class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                        <span class="font-weight-semibold">Here we go!</span> Example of an alert inside modal.
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div> -->
+                </div>
+
+                <h6 class="font-weight-semibold"><i class="fas fa-upload fa-1x"></i>Upload files</h6>
+
+                <form method="POST" action="{{url_for('repository.insert_file')}}" id="uploadform"
+                    enctype="multipart/form-data" onsubmit="">
+                    <div>
+                        <label>Upload profile image</label>
+
+                        <input type="file" name="fileupload" id="fileupload" class="form-input-styled" multiple
+                            required />
+
+                        <span class="form-text text-muted">Accepted Size: <b>Max file size 40MB</b></span>
+
+                    </div>
+                    <hr>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i>
+                    Close</button>
+                <button class="btn bg-primary"><i class="icon-checkmark3 font-size-base mr-1"></i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    // Treeview Initialization
+    $(document).ready(function () {
+        $('.treeview-animated').mdbTreeview();
+    });
+
+    var testclk = () => {
+        console.log("double click")
+    }
+
+    var test = `{{name}}`
+    // console.log(test)
+
+    var x = `{{trees|safe}}`
+    console.log(`treee=${x}`)
+    var main = `{{main_tree|safe}}`
+    console.log(`main_treee=${main}`)
+    trees = main.replace(/\'/g, '"');
+    json_tree = JSON.parse(trees)
+
+
+
+    // url = window.location.pathname
+    // loc = url.lastIndexOf("/")
+    // curr = url.split("").splice(loc + 1, url.length).join("")
+
+    test = (obj, prev) => {
+        console.log(`obj=${obj}   prev=${prev}`)
+        for (key in obj) {
+            console.log(`key=${key}`)
+            if (json_tree[key] != "file") {
+                console.log(`${key} is not a file`)
+                test(json_tree[key], key)
+            }
+            if (key === curr) {
+                console.log(`matched`)
+                return prev
+            }
+            return 0
+        }
+    }
+
+    // result = test(main, 'repository')
+    // console.log(`result = ${result}`)
+
+
+    // url = window.location.pathname
+    // last_slash = url.lastIndexOf("/")
+    // url_arr_back = url.split("")
+    // url_arr_back = url_arr_back.splice(0, last_slash)
+    // back_url = url_arr_back.join("")
+
+    // console.log(`normal back=${back_url}`)
+    // if (back_url.endsWith("next")) {
+    //     let temp = back_url.lastIndexOf("/next")
+    //     temp = url_arr_back.splice(0, temp)
+    //     back_url = temp.join("")
+    //     console.log(`nextback=${back_url}`)
+    // }
+
+    // repo links and animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll('tr[data-href]');
+        console.log("listner")
+        // const rows = document.querySelectorAll('tr[clicknext]');
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                console.log("click")
+                window.location.href = row.dataset.href;
+            })
+            row.addEventListener("mouseover", () => {
+                row.style.color = "blue";
+            })
+            row.addEventListener("mouseout", () => {
+                row.style.color = "black";
+            })
+        });
+
+        repo_url = window.location.href;
+        url_arr = repo_url.split('/')
+        repo_index = url_arr.indexOf('repository')
+        if (url_arr[repo_index + 2] === undefined) {
+            // show #
+            console.log("indside hash")
+            back = document.getElementById('back');
+            back.classList.remove('fas', 'fa-arrow-left', 'fa-lg')
+            back.textContent = "#"
+        } else {
+            console.log("indside baack asd")
+            // show back arrow
+            back = document.getElementById('back');
+            back.classList.add('fas', 'fa-arrow-circle-left', 'fa-2x')
+            back.textContent = ""
+
+
+            //get link of previous page for back func in table
+            // this will always go back to /repo, 
+            // url = window.location.pathname
+            // last_slash = url.lastIndexOf("/")
+            // url_arr_back = url.split("")
+            // url_arr_back = url_arr_back.splice(0, last_slash)
+            // back_url = url_arr_back.join("")
+            // console.log(`normal back=${back_url}`)
+            // if (back_url.endsWith("next")) {
+            //     let temp = back_url.lastIndexOf("/next")
+            //     temp = url_arr_back.splice(0, temp)
+            //     back_url = temp.join("")
+            //     console.log(`nextback=${back_url}`)
+            // }
+            backicon = document.getElementById('backicon');
+            backicon.addEventListener('click', () => {
+
+                // window.location.href = 'http://localhost:5000/repository/';
+                console.log("back history")
+                window.location.href = sessionStorage.getItem("backlink");
+            });
+            backicon.addEventListener('mouseover', () => {
+                document.getElementById('backicon').style.color = "blue";
+            })
+
+            backicon.addEventListener('mouseout', () => {
+                document.getElementById('backicon').style.color = "black";
+            });
+        }
+
+        // delete icon
+        const deleteicon = document.querySelectorAll('deleteicon');
+        deleteicon.forEach(row => {
+            deleteicon.addEventListener("click", () => {
+                console.log("deleteclick")
+                deletelink = deleteicon.dataset.deletelink;
+                console.log(`d link=${deletelink}`)
+                window.location.href = Flask.url_for('repository.delete_file', { filename: deletelink });
+            })
+        })
+
+    })
+
+    window.onbeforeunload = () => {
+        sessionStorage.setItem("backlink", window.location.href)
+
+    }
+
+    // ------------------------------------------------
+    // file validation - file size,file already present
+
+    file_upload = document.getElementById("fileupload")
+    upload_form = document.getElementById("uploadform")
+
+    file_upload.addEventListener("change", event => {
+        const files = event.target.files
+        files.forEach(file => {
+            file_size = file.size / 1000 //convert to kb
+            if (file_size > 40000) { //check file smaller than 40MB
+                error_tag = document.getElementById("errormsgupload")
+                error_tag.innerHTML = `<div
+                        class="alert alert-danger alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                        <span class="font-weight-semibold">File size should be smaller than 40MB</span><br>"${file.name}" greater than 40MB.
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                    </div>`
+                file_upload.value = null
+            } else { //check file already exists
+                all_dirs = `{{all_dirs|safe}}`
+                trees = `{{trees|safe}}`
+                trees = trees.replace(/\'/g, '"');
+                json_tree = JSON.parse(trees)
+                for (key in json_tree) {
+                    if ((typeof (json_tree[key])) === "string") {
+                        if (key === file.name) {
+                            error_tag = document.getElementById("errormsgupload")
+                            error_tag.innerHTML = `<div
+                            class="alert alert-danger alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                            <span class="font-weight-semibold">File Already Exists!</span><br>"${file.name}" already present in current folder.
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            </div>`
+                            file_upload.value = null
+                            upload_form.submit = false
+                        }
+                    } else if (typeof (json_tree[key]) === "object") {
+                        delete json_tree[key]
+                    }
+                }
+            }
+        })
+    })
+
+    // ----------------------------------------
+    //    create new folder, check name
+    format = ["\\", "/", ":", "*", "?", "\"", "<", ">", "|", "repository", "Repository", "next", "Next", "options"]
+    foldername = document.getElementById("foldername")
+    foldername.addEventListener("change", () => {
+        name = foldername.value;
+        format.forEach(key => {
+            if (name.includes(key)) {
+                error_tag = document.getElementById("errormsg2")
+                error_tag.innerHTML = `<div
+                class="alert alert-danger alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+                <span class="font-weight-semibold">File Name Conflict!</span><br>"${String(name)}" Contains "${String(key)}" which is invalid.
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                </div>`
+                foldername.value = null;
+            } else {
+            }
+        })
+    })
+
+
+    // -------------------------------------------
+    // delete button confirmation
+
+    const deletefunction = (filename) => {
+        console.log(`deletefile=${filename}`)
+        const value = confirm("Delete file! \n Files Deleted cannot be restored!.")
+        console.log(value)
+        if (value) {
+            delete_tag = document.getElementById("deletetag")
+            delete_tag.href = "javascript:void(0)"
+            return value
+        } else {
+            delete_tag = document.getElementById("deletetag")
+            delete_tag.href = "javascript:void(0)"
+            window.location = history.go(0)
+            return value
+        }
+    }
+
+
+
+
+</script>
+
+{% endblock %}
