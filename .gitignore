@@ -2,10 +2,10 @@
 /layout_1
 /sendgrid.env
 /__pycache__
-attendance/__pycache__
+/attendance/__pycache__
 .vscode/*
 layout_1/*
 static/student/mandar2/*
 app2.py
-repository/__pycache__/*
-attendance/__pycache__/*
+/repository/__pycache__/*
+/attendance/__pycache__/*
