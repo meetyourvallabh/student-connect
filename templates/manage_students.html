@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h1>
+        Manage Students
+    </h1>
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h6 class="card-title">Users</h6>
+            <div class="header-elements">
+                <span><i class="icon-history text-warning mr-2"></i> Jul 7, 10:30</span>
+            
+            </div>
+        </div>
+
+        <!-- Numbers -->
+        <div class="card-body py-0">
+            <div class="row text-center">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_students.it | length}}</h5>
+                        <span class="text-muted font-size-sm">IT</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_students.computer | length}}</h5>
+                        <span class="text-muted font-size-sm">Computer</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_students.mechanical | length}}</h5>
+                        <span class="text-muted font-size-sm">Mechanical</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /numbers -->
+
+
+        <!-- Area chart -->
+        <div id="messages-stats"><svg width="742" height="40"><g transform="translate(0,0)"></g></svg></div>
+        <!-- /area chart -->
+
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-solid nav-justified bg-indigo-400 border-x-0 border-bottom-0 border-top-indigo-300 mb-0">
+            <li class="nav-item">
+                <a href="#it-table" class="nav-link font-size-sm text-uppercase active show" data-toggle="tab">
+                    IT
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#computer-table" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                    Computer
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#mechanical-table" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                    Mechanical
+                </a>
+            </li>
+        </ul>
+        <!-- /tabs -->
+
+
+        <!-- Tabs content -->
+        <div class="tab-content card-body">
+            <div class="tab-pane fade" id="it-table">
+                <ul class="media-list">
+                    {% for student in all_students.it %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{student.fname}} {{student.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{student.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+
+            <div class="tab-pane fade" id="computer-table">
+                <ul class="media-list">
+                    {% for student in all_students.computer %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{student.fname}} {{student.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{student.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-pane fade active show" id="mechanical-table">
+                <ul class="media-list">
+                    {% for student in all_students.mechanical %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{student.fname}} {{student.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{student.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- /tabs content -->
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+

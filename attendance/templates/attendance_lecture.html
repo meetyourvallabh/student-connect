@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
+{% block head %}
+<script
+    src="{{url_for('static',filename='global_assets/js/demo_pages/datatables_extension_buttons_init.js')}}"></script>
 
+<script src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+<script
+    src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/extensions/buttons.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/form_layouts.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/visualization/c3/c3.min.js')}}"></script>
+
+{% endblock %}
 {% block body %}
 <div class="card">
     <div class="card-header">
@@ -8,35 +19,154 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-6">
-                <a href="/attendance/automatic/">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <i class="icon-redo mr-3 icon-2x"></i>
-                                <div>Automatic <div class="opacity-50">Just click a picture</div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                    <a href="{{url_for('attendance.automatic',lecture_id = attendance.id)}}">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <i class="icon-redo mr-3 icon-2x"></i>
+                                    <div>Automatic <div class="opacity-50">Just click a picture</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                    <a href="">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <i class="icon-flip-vertical4 mr-3 icon-2x"></i>
+                                    <div>Manual <div class="opacity-50">Swipe Left/Right</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                </div>
+                
             </div>
 
-            <div class="col-sm-6">
-                <a href="">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <i class="icon-flip-vertical4 mr-3 icon-2x"></i>
-                                <div>Manual <div class="opacity-50">Swipe Left/Right</div>
-                                </div>
-                            </div>
+            
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                
+                        <div style="max-height: 320px; position: relative;">
+                            <div id="chart"></div>
                         </div>
+                        
+                            
+                       
+                        
+                        
+                
                     </div>
-                </a>
+                </div>
+                
+                
+                
+                
+                
             </div>
         </div>
 
     </div>
 </div>
+
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Attendence for this lecture</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    
+
+    {% if attendance.present is defined%}
+
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+
+        <div class="datatable-scroll"><table class="table datatable-button-init-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+        <thead>
+            <tr role="row">
+                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-label="PRN Number: permanent registration number">PRN</th>
+                <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-sort="ascending" aria-label="First Name: activate to sort column descending">First Name</th>
+                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-label="Last Name: activate to sort column ascending">Last Name</th>
+                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-label="Job Title: activate to sort column ascending">Derpartment</th>
+                
+                    <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                        Status</th>
+                <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                    Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+              
+        {% for student in all_students %}
+        <tr role="row" class="odd">
+            <td>{{student.prn}}</td>
+            <td>{{student.fname}}</td>
+            <td>{{student.mname}}</td>
+            <td class="sorting_1">{{student.lname}}</td>
+            
+            {%if student.status == "present" %}
+            <td><span class="badge badge-success">{{student.status}}</span></td>
+            {% else %}
+            <td><span class="badge badge-danger">{{student.status}}</span></td>
+            {% endif %}
+            <td><a class="badge badge-secondary" href="{{url_for('attendance.attendance_change_status',current_status = student.status,lecture_id = attendance.id, student_id = student.username)}}">Change</a></td>
+        </tr>
+       {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+    </div>
+
+    
+
+    
+
+{% endif %}
+
+</div>
+
+
+
+<script>
+    var chart = c3.generate({
+    data: {
+        columns: [
+            ['present', `{{attendance.present|length}}`],
+            ['absent', `{{attendance.absent|length}}`],
+        ],
+        type : 'donut',
+        colors: {
+            present: '#4caf50',
+            absent: '#f44336',
+        }
+
+    },
+    donut: {
+        title: "Total Attendence"
+    },
+    
+});
+</script>
 {% endblock %}

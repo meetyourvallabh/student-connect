@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/datatables_basic.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/form_layouts.js')}}"></script>
+
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>
+        Manage Teachers
+    </h1>
+    {% include "includes/_messages.html" %}
+
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h5 class="card-title">Add Teachers</h5>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                    <a class="list-icons-item" data-action="reload"></a>
+                    <a class="list-icons-item" data-action="remove"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form action="{{url_for('manage_teachers')}}" method="POST">
+                <div class="form-group row">
+                    
+                    <div class="col-lg-4">
+                        <label>First Name:</label>
+                        <input type="text" name="fname" required class="form-control" placeholder="Eugene Kopyov">
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <label>Middle Name:</label>
+                        <input type="text" name="mname" required class="form-control" placeholder="Eugene Kopyov">
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <label>Last Name:</label>
+                        <input type="text" name="lname" required class="form-control" placeholder="Eugene Kopyov">
+                    </div>
+                </div>
+                
+
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Email:</label>
+                    <div class="col-lg-9">
+                        <input type="email" name="email" required class="form-control" placeholder="Your Email ID">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Branch:</label>
+                    <div class="col-lg-9">
+                        <select name="branch" required class="form-control form-control-select2 select2-hidden-accessible" data-fouc="" tabindex="-1" aria-hidden="true">
+                            <optgroup label="MCOE">
+                                <option value="it">Information Technology</option>
+                                <option value="computer">Computer</option>
+                                <option value="mechanical">Mechanical</option>
+                            </optgroup>
+                            
+                        </select>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="d-block font-weight-semibold">Gender</label>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="gender" checked="">
+                            Male
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="gender">
+                            Female
+                        </label>
+                    </div>
+                </div>
+
+                
+
+               
+
+                
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h6 class="card-title">Users</h6>
+            <div class="header-elements">
+                <span><i class="icon-history text-warning mr-2"></i> Jul 7, 10:30</span>
+            
+            </div>
+        </div>
+
+        <!-- Numbers -->
+        <div class="card-body py-0">
+            <div class="row text-center">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_teachers.it | length}}</h5>
+                        <span class="text-muted font-size-sm">IT</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_teachers.computer | length}}</h5>
+                        <span class="text-muted font-size-sm">Computer</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">{{all_teachers.mechanical | length}}</h5>
+                        <span class="text-muted font-size-sm">Mechanical</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /numbers -->
+
+
+        <!-- Area chart -->
+        <div id="messages-stats"><svg width="742" height="40"><g transform="translate(0,0)"></g></svg></div>
+        <!-- /area chart -->
+
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-solid nav-justified bg-indigo-400 border-x-0 border-bottom-0 border-top-indigo-300 mb-0">
+            <li class="nav-item">
+                <a href="#it-table" class="nav-link font-size-sm text-uppercase active show" data-toggle="tab">
+                    IT
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#computer-table" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                    Computer
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#mechanical-table" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                    Mechanical
+                </a>
+            </li>
+        </ul>
+        <!-- /tabs -->
+
+
+        <!-- Tabs content -->
+        <div class="tab-content card-body">
+            <div class="tab-pane fade" id="it-table">
+                <ul class="media-list">
+                    {% for teacher in all_teachers.it %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{teacher.fname}} {{teacher.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{teacher.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+
+            <div class="tab-pane fade" id="computer-table">
+                <ul class="media-list">
+                    {% for teacher in all_teachers.computer %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{teacher.fname}} {{teacher.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{teacher.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-pane fade active show" id="mechanical-table">
+                <ul class="media-list">
+                    {% for teacher in all_teachers.mechanical %}
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            <img src="../../../../global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                        </div>
+                        
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <a href="#">{{teacher.fname}} {{teacher.lname}}</a>
+                                <span class="font-size-sm text-muted">
+                                    <a class="btn btn-primary" href="">Edit</a>
+                                </span>
+                            </div>
+
+                            {{teacher.branch}}
+                        </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- /tabs content -->
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+

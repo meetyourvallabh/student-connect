@@ -1,19 +1,121 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<script src="{{url_for('static',filename='global_assets/js/plugins/visualization/d3/d3.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/visualization/c3/c3.min.js')}}"></script>
+
+{% endblock %}
 
 
 {% block body %}
 
+{% include "includes/_messages.html" %}
 <div class="card">
     <div class="card-header">
         <h5>Automatic Mode</h5>
     </div>
     <div class="card-body">
 
+        Click and upload the picture of your class and continue your lecture.
+        <br><br>
+        <a class="badge bg-success" href="{{url_for('attendance.lecture',id = lecture_id)}}"> < Back </a>
+    </div>
+
+    
+</div>
 
 
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Picture upload</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form action="{{url_for('attendance.automatic',lecture_id = lecture_id)}}" method="POST" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Picture</label>
+                <div class="col-lg-9">
+                    <div class="uniform-uploader"><input type="file" name="image" class="form-input-styled" data-fouc=""><span class="filename" style="-webkit-user-select: none;">No file selected</span><span class="action btn bg-pink-400" style="-webkit-user-select: none;">Choose File</span></div>
+                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 10Mb</span>
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+            </div>
+        </form>
     </div>
 </div>
+
+
+
+
+
+{% if data is defined %}
+
+
+
+
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h3 class="card-title">Report</h3>
+        <div class="header-elements">
+            <span><i class="icon-history text-warning mr-2"></i> Jul 7, 10:30</span>
+            <span class="badge bg-success align-self-start ml-3">Online</span>
+        </div>
+    </div>
+
+    <!-- Numbers -->
+    <div class="card-body py-0">
+        <div class="row text-center">
+            <div class="col-4">
+                <div class="mb-3">
+                    <h5 class="font-weight-semibold mb-0">{{data.number_of_students}}</h5>
+                    <span class="text-muted font-size-sm">Total People in image             </span>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="mb-3">
+                    <h5 class="font-weight-semibold mb-0">{{data.known_count}}</h5>
+                    <span class="text-muted font-size-sm">Known</span>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="mb-3">
+                    <h5 class="font-weight-semibold mb-0">{{data.unknown_count}}</h5>
+                    <span class="text-muted font-size-sm">Unknown</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /numbers -->
+
+</div>
+
+
+<h4>Unknown faces are:</h4>
+    <div class="row">
+        {% for image_name in data.unknown_face_images %}
+        <div class="col">
+            <img src="{{url_for('static',filename='unknowns/')}}{{session.username}}/{{image_name}}.jpg" height="100" width="100" alt="">
+            <br>
+            
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+{% endif %}
 
 
 

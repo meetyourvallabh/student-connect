@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h1>
+        Manage Users
+    </h1>
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h6 class="card-title">Users</h6>
+            <div class="header-elements">
+                <span><i class="icon-history text-warning mr-2"></i> Jul 7, 10:30</span>
+            
+            </div>
+        </div>
+
+        <!-- Numbers -->
+        <div class="card-body py-0">
+            <div class="row text-center">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">2,345</h5>
+                        <span class="text-muted font-size-sm">HOD</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">3,568</h5>
+                        <span class="text-muted font-size-sm">Teacher</span>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="mb-3">
+                        <h5 class="font-weight-semibold mb-0">32,693</h5>
+                        <span class="text-muted font-size-sm">Student</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /numbers -->
+
+
+        <!-- Area chart -->
+        <div id="messages-stats"><svg width="742" height="40"><g transform="translate(0,0)"></g></svg></div>
+        <!-- /area chart -->
+
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-solid nav-justified bg-indigo-400 border-x-0 border-bottom-0 border-top-indigo-300 mb-0">
+            <li class="nav-item">
+                <a href="{{url_for('manage_hods')}}" class="nav-link font-size-sm text-uppercase">
+                    HOD
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{url_for('manage_teachers')}}" class="nav-link font-size-sm text-uppercase">
+                    Teacher
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{url_for('manage_students')}}" class="nav-link font-size-sm text-uppercase">
+                    Student
+                </a>
+            </li>
+        </ul>
+        <!-- /tabs -->
+
+
+   
+       
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+

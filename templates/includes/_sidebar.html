@@ -65,17 +65,57 @@
                                                 </span>
                                         </a>
                                 </li>
+
+                                {% if session.type == "admin" %}
+                                <!--admin area-->
+                                <li class="nav-item nav-item-submenu {{expand_nav_if('manage_users')}}">
+                                        <a href="{{url_for('manage_users')}}" id="/manage_users/"
+                                                class="nav-link {{active_in_link('/admin/manage_users/')}}"><i
+                                                        class="icon-copy"></i>
+                                                <span>Manage Users</span></a>
+
+                                        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                                                <li class="nav-item"><a id="/attendance/"
+                                                                href="{{url_for('manage_users')}}"
+                                                                class="nav-link {{active_exact_link('/admin/manage_users/')}}">Manage Users</a></li>
+                                                <li class="nav-item"><a id="/admin/manage_users/students/"
+                                                                href="{{url_for('manage_students')}}"
+                                                                class="nav-link {{active_in_link('/admin/manage_users/students/')}}">Students</a>
+                                                </li>
+                                                <li class="nav-item"><a id="/admin/manage_users/teachers/"
+                                                        href="{{url_for('manage_teachers')}}"
+                                                        class="nav-link {{active_in_link('/admin/manage_users/teachers/')}}">Teachers</a>
+                                                </li>
+                                                <li class="nav-item"><a id="/admin/manage_users/hods/"
+                                                        href="{{url_for('manage_hods')}}"
+                                                        class="nav-link {{active_in_link('/admin/manage_users/hods/')}}">HOD</a>
+                                                </li>
+
+
+                                                <li class="nav-item"><a id="/attendance/manual/" href="#"
+                                                                class="nav-link disabled">Manual <span
+                                                                        class="badge bg-transparent align-self-center ml-auto">Coming
+                                                                        soon</span></a></li>
+                                        </ul>
+                                </li>
+                                <!--admin area ends -->
+                                {% endif %}
+
+
+                                
+
+
+                                {% if session.type == "teacher" %}
+                                <!--Teachers area-->
                                 <li class="nav-item">
-                                        <a href="{{url_for('profile')}}" id="/profile/"
-                                                class="nav-link {{active_in_link('profile')}}">
+                                        <a href="{{url_for('teacher_profile')}}" id="/teacher_profile/"
+                                                class="nav-link {{active_in_link('teacher_profile')}}">
                                                 <i class="icon-profile"></i>
                                                 <span>
                                                         Profile
                                                 </span>
                                         </a>
                                 </li>
-
-
                                 <li class="nav-item nav-item-submenu {{expand_nav_if('attendance')}}">
                                         <a href="#" id="/attendance/"
                                                 class="nav-link {{active_in_link('attendance')}}"><i
@@ -88,10 +128,7 @@
                                                                 href="{{url_for('attendance.index')}}"
                                                                 class="nav-link {{active_exact_link('/attendance/')}}">Attendance
                                                                 Dashboard</a></li>
-                                                <li class="nav-item"><a id="/attendance/automatic/"
-                                                                href="{{url_for('attendance.automatic')}}"
-                                                                class="nav-link {{active_in_link('automatic')}}">Automatic</a>
-                                                </li>
+                                                
 
 
                                                 <li class="nav-item"><a id="/attendance/manual/" href="#"
@@ -100,6 +137,10 @@
                                                                         soon</span></a></li>
                                         </ul>
                                 </li>
+
+                                <!--Teachers area End-->
+                                {% endif %}
+
                                 <li class="nav-item">
                                         <a href="{{url_for('repository.index')}}" class="nav-link">
                                                 <i class="icon-profile"></i>
@@ -108,14 +149,51 @@
                                                 </span>
                                         </a>
                                 </li>
+
+                                {% if session.type == "student" %}
+                                <!--Only students Area-->
+                                <li class="nav-item">
+                                        <a href="{{url_for('profile')}}" id="/profile/"
+                                                class="nav-link {{active_in_link('profile')}}">
+                                                <i class="icon-profile"></i>
+                                                <span>
+                                                        Profile
+                                                </span>
+                                        </a>
+                                </li>
+
+                                <li class="nav-item">
+                                        <a href="{{url_for('attendance.attendance_student')}}" id="/attendance/student/"
+                                                class="nav-link {{active_in_link('attendance_student')}}">
+                                                <i class="icon-profile"></i>
+                                                <span>
+                                                        Attendance
+                                                </span>
+                                        </a>
+                                </li>
+
+                                
+                                <!--Only students Area End-->
+                                {% endif %}
+
+
+                                <!-- /main -->
+
                                 <li class="nav-item">
                                         <a class="nav-link" data-toggle="modal" data-target="#modal_meeting">
                                                 <i class="icon-profile"></i>
                                                 <span>Video Meeting</span>
                                         </a>
                                 </li>
-                                <!-- /main -->
-
+                                <li class="nav-item">
+                                        <a href="http://localhost:5000" id="/teacher_profile/"
+                                                class="nav-link {{active_in_link('teacher_profile')}}">
+                                                <i class="icon-profile"></i>
+                                                <span>
+                                                        MCQ Tests
+                                                </span>
+                                        </a>
+                                </li>
                         </ul>
                 </div>
                 <!-- /main navigation -->

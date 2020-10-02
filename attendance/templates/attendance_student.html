@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="{{url_for('static',filename='global_assets/js/plugins/visualization/d3/d3.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/plugins/visualization/c3/c3.min.js')}}"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+{% include "includes/_messages.html" %}
+
+<div class="container">
+    <h1>
+        Attendance
+    </h1>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Lectures Summary</h5>
+                    <p class="card-text">Your Attendance summary will update after each lecture which you will attend.</p>
+                </div>
+
+                <ul class="list-group list-group-flush border-top">
+                    <li class="list-group-item">
+                        <span class="font-weight-semibold">Total Lectures:</span>
+                        <div class="ml-auto">{{data.total_lectures}}</div>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="font-weight-semibold">Lectures attended:</span>
+                        <div class="ml-auto">{{data.present}}</div>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="font-weight-semibold">Lectures missed:</span>
+                        <div class="ml-auto">{{data.absent}}</div>
+                    </li>
+                    
+                </ul>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <span class="text-muted">Total Percentage:</span>
+                    <span>
+
+                        <span class="text-muted ml-2">{{ '%0.2f'| format( data.attendance_percentage | float) }}</span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-5">
+            <div class="card text-center">
+                <div class="card-body">
+            
+                    <div style="max-height: 320px; position: relative;">
+                        <div id="chart"></div>
+                    </div>    
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    var chart = c3.generate({
+    data: {
+        columns: [
+            ['present', `{{data.present}}`],
+            ['absent', `{{data.absent}}`],
+        ],
+        type : 'donut',
+        colors: {
+            present: '#4caf50',
+            absent: '#f44336',
+        }
+
+    },
+    donut: {
+        title: "Overall"
+    },
+    
+});
+</script>
+{% endblock %}

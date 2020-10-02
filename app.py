@@ -59,7 +59,11 @@ def allowed_file(filename):
 def random_chars(y):
     return ''.join(choice(string.ascii_letters) for x in range(y))
 
-
+def cursor_to_list(cursor):
+    l = []
+    for i in cursor:
+        l.append(i)
+    return l
 
 
 
@@ -84,6 +88,39 @@ def is_already_logged_in(f):
             return redirect(url_for('index'))
         else:
             return f(*args, **kwargs)
+    return wrap
+
+# Check if user is admin
+def is_admin(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if session['type'] == 'admin':
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized access, You\'re not allowed here', 'danger')
+            return redirect(url_for('index'))
+    return wrap
+
+# Check if user is admin
+def is_student(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if session['type'] == 'student':
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized access, You\'re not allowed here', 'danger')
+            return redirect(url_for('index'))
+    return wrap
+
+# Check if user is admin
+def is_teacher(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if session['type'] == 'teacher':
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized access, You\'re not allowed here', 'danger')
+            return redirect(url_for('index'))
     return wrap
 
 
@@ -115,6 +152,7 @@ def login():
                         session['email']=found_user['email']
                         session['year']=found_user['year']
                         session['branch']=found_user['branch']
+                        session['division']=found_user['division']
                         if 'pro_pic' in found_user:
                             session['pro_pic']=found_user['pro_pic']
                         session['logged_in']=True
@@ -129,6 +167,7 @@ def login():
                         flash('Wait for the email if not recieved','warning')
                         return redirect(url_for('login'))
                 else:
+                    session['username'] = found_user['username']
                     session['fname'] = found_user['fname']
                     session['mname'] = found_user['mname']
                     session['lname'] = found_user['lname']
@@ -188,7 +227,7 @@ def register():
             passw = request.form['password']
             hashpass = bcrypt.hashpw(passw.encode('utf-8'), bcrypt.gensalt())
             
-            users.insert_one({'username':username,'fname':request.form['fname'],'password':hashpass,'verification':verification_code,'approved':'no','mname':request.form['mname'],'lname':request.form['lname'],'type':'student' ,
+            users.insert_one({'username':username,'fname':request.form['fname'],'password':hashpass,'verification':verification_code,'approved':'yes','mname':request.form['mname'],'lname':request.form['lname'],'type':'student' ,
             'email':request.form['email'],'phone':request.form['phone'], 'branch':request.form['branch'],'year':request.form['year'],'division':request.form['division'],'prn':request.form['prn']})
             msg = Message('StudentsConnect: Account registered successfully', sender='developer@makeyourown.club', recipients=[request.form['email']])
             msg_string = '<h1>Hello ' + request.form['fname']+ request.form['lname'] + '</h1><br> You are registered sucessfully !! <br><br> Click on below link to verify your account: <br> http://localhost:5000/verify/'+verification_code+'<br> Your UserID :'+username
@@ -287,6 +326,7 @@ def logout():
 
 @app.route("/profile/", methods=['POST','GET'])
 @is_logged_in
+@is_student
 def profile():
     users = mongo.db.users
     user = users.find_one({"email":session['email'], "type":"student"})
@@ -369,6 +409,7 @@ def profile_step(step):
 
 
 @app.route('/upload_profile_image/<username>/', methods=['POST'])
+@is_logged_in
 def upload_profile_image(username):
     if request.method == 'POST':
         users = mongo.db.users
@@ -441,11 +482,219 @@ def upload_profile_image(username):
     return redirect(url_for('profile'))
 
 
+######Admin routes######
+
+@app.route('/admin/manage_users/', methods=['GET', 'POST'])
+@is_logged_in
+@is_admin
+def manage_users():
+    return render_template("manage_users.html")
+
+@app.route('/admin/manage_users/students/', methods=['GET', 'POST'])
+@is_logged_in
+@is_admin
+def manage_students():
+    users = mongo.db.users
+    all_students = {
+        'it':cursor_to_list(users.find({'type':'student','branch':'it'})),
+        'computer':cursor_to_list(users.find({'type':'student','branch':'computer'})),
+        'mechanical':cursor_to_list(users.find({'type':'student','branch':'mechanical'}))
+    }
+    return render_template("manage_students.html",all_students = all_students)
+
+@app.route('/admin/manage_users/teachers/', methods=['GET', 'POST'])
+@is_logged_in
+@is_admin
+def manage_teachers():
+    users = mongo.db.users
+    if request.method == 'POST':
+        username = request.form['fname'] + request.form['mname'][0] + request.form['lname'][0] + str(randint(11,99))
+        password = request.form['fname'] + str(randint(111,999))
+        hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        
+        users.insert_one({
+            'username':username,
+            'fname':request.form['fname'],
+            'mname':request.form['mname'],
+            'lname':request.form['lname'],
+            'email':request.form['email'],
+            'type':'teacher',
+            'password':hashpass,
+            'gender':request.form['gender'],
+            'branch':request.form['branch']
+        })
+        msg = Message('StudentsConnect: Your Teacher account created successfully', sender='developer@makeyourown.club', recipients=[request.form['email']])
+        msg_string = '<h1>Hello Prof.' + request.form['fname']+ request.form['lname'] + '</h1><br> You are registered sucessfully !! <br><br> Click on below link to verify your account: <br> Your UserID :'+username+ '<br>Your Password :'+password
+        msg.body = msg_string
+        msg.html = msg.body
+        mail.send(msg)
+        flash("Teacher added successfully","success")
+    
+    
+    all_teachers = {
+        'it':cursor_to_list(users.find({'type':'teacher','branch':'it'})),
+        'computer':cursor_to_list(users.find({'type':'teacher','branch':'computer'})),
+        'mechanical':cursor_to_list(users.find({'type':'teacher','branch':'mechanical'}))
+    }
+    
+    return render_template("manage_teachers.html",all_teachers = all_teachers)
 
 
 
+@app.route('/admin/manage_users/hods/', methods=['GET', 'POST'])
+@is_logged_in
+@is_admin
+def manage_hods():
+    users = mongo.db.users
+    if request.method == 'POST':
+        username = request.form['fname'] + request.form['mname'][0] + request.form['lname'][0] + str(randint(11,99))
+        password = request.form['fname'] + str(randint(111,999))
+        hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        
+        users.insert_one({
+            'username':username,
+            'fname':request.form['fname'],
+            'mname':request.form['mname'],
+            'lname':request.form['lname'],
+            'email':request.form['email'],
+            'type':'hod',
+            'password':hashpass,
+            'gender':request.form['gender'],
+            'branch':request.form['branch']
+        })
+        msg = Message('StudentsConnect: Your HOD account created successfully', sender='developer@makeyourown.club', recipients=[request.form['email']])
+        msg_string = '<h1>Hello Prof.' + request.form['fname']+ request.form['lname'] + '</h1><br> You are registered sucessfully !! <br><br> Click on below link to verify your account: <br> Your UserID :'+username+ '<br>Your Password :'+password
+        msg.body = msg_string
+        msg.html = msg.body
+        mail.send(msg)
+        flash("HOD added successfully","success")
+    
+    hods = users.find({'type':'hod'})
+    return render_template("manage_hods.html",hods = hods)
+
+@app.route('/delete_user/<id>', methods=['GET', 'POST'])
+def delete_users(id):
+    if mongo.db.users.delete_one({'username':id}):
+        flash('User delete successfully','success')
+    else:
+        flash("No user found","danger")
+    return redirect(request.url)
+
+
+@app.route('/teacher_profile/', methods=['GET', 'POST'])
+def teacher_profile():
+    users = mongo.db.users
+    user = users.find_one({"email":session['email'], "type":"teacher"})
+
+    if request.method == "POST":  
+        username_exist = users.find_one({"username":request.form['username']})
+        email_exist = users.find_one({"email":request.form['email']})
+        if email_exist and user['email'] != email_exist['email']: #new email already in use
+            flash("Email Already exists","danger")
+            return render_template("profile.html",user=user)
+        elif username_exist and user['username'] != username_exist['username']: #new username 
+            flash("Username Already exists","danger")
+            return render_template("profile.html",user=user)
+        else:
+            #update new user details
+            users.update_one({"email":session['email'],"type":"teacher"},{"$set":{
+                        "email":request.form['email'],"username":request.form['username'],
+                        "fname":request.form['fname'],"lname":request.form['lname'],
+                        "mname":request.form['mname'],"address":request.form['address'],
+                        "phone":request.form['phone'],"branch":request.form['branch'],
+                        }},upsert=True)
+            #update session
+            updated_user = users.find_one({"email":request.form['email'], "type":"teacher"})
+            session['username'] = updated_user['username']
+            session['fname'] = updated_user['fname']
+            session['mname'] = updated_user['mname']
+            session['lname'] = updated_user['lname']
+            session['type'] = updated_user['type']
+            session['email']=updated_user['email']
+            session['branch']=updated_user['branch']
+            session['logged_in']=True
+            flash("Profile Updated Successfully","success")
+            return render_template("teacher_profile.html",user=updated_user)
+
+    return render_template("teacher_profile.html",user=user)
+
+
+
+@app.route('/upload_profile_image/teacher/<username>/', methods=['POST'])
+@is_logged_in
+@is_teacher
+def upload_profile_image_teacher(username):
+    if request.method == 'POST':
+        users = mongo.db.users
+        user = users.find_one({'username':username})
+        path = os.path.abspath('static/teacher/'+username)
+        train_path = os.path.abspath('static/teacher/'+username+'/train_img')
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+        if not os.path.exists(train_path):
+            os.makedirs(train_path)
+
+        app.config['UPLOAD_FOLDER'] = path
+        if 'image' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        
+        
+        file = request.files['image']
+        #file.seek(0, os.SEEK_END)
+        #file_length = file.tell()
+        #print(file_length)
+        #if not file_length < 1024000 :
+        #    flash('File size is greater than 1 mb','danger')
+        #    return redirect(url_for('profile'))
+        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(f)
+
+        image_file = request.files['image']
+        
+        pro_pic_image = face_recognition.load_image_file(image_file)
+        
+        face_locations = face_recognition.face_locations(pro_pic_image)
+        
+        if len(face_locations) > 0:
+            if len(face_locations) <= 1:
+                
+        
+                if 'pro_pic' in user:
+                    if os.path.exists('static/'+user['pro_pic']):
+                        os.remove('static/'+user['pro_pic'])
+                    if os.path.exists('static/teacher/'+username+'/train_img/pro_pic.jpg'):
+                        os.remove('static/teacher/'+username+'/train_img/pro_pic.jpg')
+                
+                top, right, bottom, left = face_locations[0]
+                face_image = pro_pic_image[top-50:bottom+50, left-50:right+50]
+                pil_image = Image.fromarray(face_image)
+
+                random_name = random_chars(7)+str(randint(111,999))
+                pil_image.save('static/teacher/'+username+'/train_img/pro_pic.jpg')
+                #new_image = Image.fromarray(pro_pic_image)
+                #new_image.save('static/teacher/'+username+'/pro_pic.jpg')
+
+                
+                
+                
+            else:
+                os.remove('static/teacher/'+username+'/'+file.filename)
+                flash('Your image contains multiple people','danger')
+                return redirect(url_for('teacher_profile'))
+        else:
+            os.remove('static/teacher/'+username+'/'+file.filename)
+            flash('Your image contains no faces','danger')
+            return redirect(url_for('teacher_profile'))
+        
+        
+        users.update_one({'username':username},{'$set':{'pro_pic':'teacher/'+username+'/'+file.filename}})
+        flash('Profile Image uploaded succesfully','success')
+    return redirect(url_for('teacher_profile'))
 
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
-    app.run(host='0.0.0.0', debug='true', port='5000')
+    app.run(host='0.0.0.0', debug='true', port='5001')

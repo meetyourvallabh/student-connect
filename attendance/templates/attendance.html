@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 {% block head %}
+<script
+    src="{{url_for('static',filename='global_assets/js/demo_pages/datatables_extension_buttons_init.js')}}"></script>
+
+<script src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+<script
+    src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/extensions/buttons.min.js')}}"></script>
 <script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
 <script src="{{url_for('static',filename='global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
 <script src="{{url_for('static',filename='global_assets/js/demo_pages/form_layouts.js')}}"></script>
@@ -57,7 +63,7 @@
                                     class="form-control form-control-select2 select2-hidden-accessible" data-fouc=""
                                     tabindex="-1" aria-hidden="true">
                                     <option></option>
-                                    <option value="IT">IT</option>
+                                    <option value="it">IT</option>
                                     <option value="computer">Computer</option>
                                     <option value="electrical">Electrical</option>
                                     <option value="mechanical">Mechanical</option>
@@ -175,7 +181,59 @@
 
     </div>
     <div class="col-md-6">
-
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h5 class="card-title">Your Attendance sheets</h5>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+                        <a class="list-icons-item" data-action="remove"></a>
+                    </div>
+                </div>
+            </div>
+    
+            
+    
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+    
+                <div class="datatable-scroll"><table class="table datatable-button-init-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            aria-sort="ascending" aria-label="First Name: activate to sort column descending">Subject</th>
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            aria-label="Last Name: activate to sort column ascending">Class</th>
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            aria-label="Job Title: activate to sort column ascending">Date</th>
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            aria-label="Job Title: activate to sort column ascending">Classroom</th>
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            aria-label="Job Title: activate to sort column ascending">Attendance</th>
+                        
+                        <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                      
+                    {% for sheet in all_attendances %}
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{sheet.subject}}</td>
+                    <td>{{sheet.year}} {{sheet.branch}} {{sheet.division}}</td>
+                    <td>{{sheet.date}}</td>
+                    <td>{{sheet.classroom}}</td>
+                    <td>{{sheet.present|length}}/{{sheet.absent|length}}</td>
+                    
+                    <td><a class="badge badge-success" href="{{url_for('attendance.lecture',id=sheet.id)}}">Open</a></td>
+                </tr>
+                {% endfor %}
+    
+                </tbody>
+            </table>
+        </div>
+            </div>
+        </div>
     </div>
 </div>
 
