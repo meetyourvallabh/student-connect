@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="{{url_for('static',filename='global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/form_select2.js')}}"></script>
+
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/datatables_extension_buttons_init.js')}}"></script>
+
+<script src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+<script
+    src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/extensions/buttons.min.js')}}"></script>
+{% endblock %}
+
+
+{% block body %}
+
+<a href="{{url_for('repository.index',current_dir=current_dir)}}" class="breadcrumb-item"><i class="icon-circle-left2 mr-2"></i>Back</a>
+<h3>Sharing {{data.file_name}}</h3>
+<h6>/{{'/'.join(data.current_dir.split('/')[3:])}}</h6>
+<hr>
+{% include "includes/_messages.html" %}
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Multiple select</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form action="{{url_for('repository.sharing',file_name=data.file_name,file_type=data.file_type,current_dir=current_dir)}}" method="POST">
+        <div class="form-group">
+            <label>Multiple select</label>
+            <select multiple name="shared_users" class="form-control select select2-hidden-accessible" data-fouc="" tabindex="-1"
+                aria-hidden="true">
+
+                {% for dept in users_data.keys() %}
+
+                <optgroup label="{{dept}}">
+                    {% for user in users_data[dept] %}
+                    {% if user.username != session.username %}
+                    <option value="{{user.username}}">{{user.fname}} {{user.mname}} {{user.lname}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                {% endfor %}
+
+                
+                
+            </select><span class="select2 select2-container select2-container--default select2-container--below" dir="ltr"
+                style="width: 100%;"><span class="selection">
+                    </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+        </div>
+
+        <input class="btn btn-sm btn-success" type="submit" value="Share">
+
+        </form>
+    
+    </div>
+</div>
+<div class="card">
+    <div class="card-header header-elements-inline">
+        Shared with
+    </div>
+    <div class="card-body">
+        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+
+            <div class="datatable-scroll">
+                <table class="table datatable-button-init-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+            <thead>
+                <tr role="row">
+                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="PRN Number: permanent registration number">Name</th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-sort="ascending" aria-label="First Name: activate to sort column descending">Department</th>
+                    <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                        Share</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+              {% if data.shared_with is defined %}    
+            {% for user in data.shared_with %}
+            <tr role="row" class="odd">
+                <td class="sorting_1">
+                    {{user.fname}} {{user.mname}} {{user.lname}}
+                </td>
+                <td>
+                    {{user.branch}}
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-danger" href="{{url_for('repository.unshare',file_name=data.file_name,file_type=data.file_type,current_dir=current_dir,username=user.username)}}">Unshare</a>
+                </td>
+                        
+            </tr>
+           {% endfor %}
+           {% endif %}  
+           
+        
+            </tbody>
+        </table>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+

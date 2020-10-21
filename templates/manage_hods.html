@@ -144,7 +144,7 @@
                 <td>{{hod.branch}}</td>
                 <td>19 Apr 1969</td>
                 <td><span class="badge badge-success">Working</span></td>
-                <td><a class="btn btn-small btn-danger" href="">Edit</a></td>
+                <td><a href="{{url_for('delete_hod',username=hod.username)}}"><span class="badge badge-danger">Delete</span></a></td>
             </tr>
             {% endfor %}
 

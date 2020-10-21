@@ -1,0 +1,212 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="{{url_for('static',filename='global_assets/js/demo_pages/datatables_extension_buttons_init.js')}}"></script>
+
+<script src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+<script
+    src="{{url_for('static',filename='global_assets/js/plugins/tables/datatables/extensions/buttons.min.js')}}"></script>
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/file_upload.css')}}">
+
+
+<script src="{{url_for('static',filename='js/file_upload.js')}}"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+
+
+    <h5>Repository</h5>
+    <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
+        <div class="d-flex">
+            
+            <div class="breadcrumb">
+                {% if current_dir !=  'static/repository/'+session.username%}
+                <a href="{{url_for('repository.index',current_dir=back_link)}}" class="breadcrumb-item"><i class="icon-circle-left2 mr-2"></i>Back</a>
+                {% endif %}
+                <a href="{{url_for('repository.index',current_dir='static/repository/'+session.username)}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
+                {% set bread_path = 'static/repository/'+session.username %}
+                {% for l in current_dir.split('/')[3:] %}
+                {% set bread_path = bread_path + '/' + l %}
+                
+                <a href="{{url_for('repository.index',current_dir=bread_path)}}" class="breadcrumb-item">{{l}}</a>
+                {% endfor %}
+            </div>
+
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+
+        <div class="header-elements d-none">
+            <div class="breadcrumb justify-content-center">
+                <a href="{{url_for('repository.download',file_name=current_dir.split('/')[-1],file_type='Folder',current_dir=current_dir)}}" class="breadcrumb-elements-item">
+                    <i class="icon-file-download2 mr-2"></i>
+                    Download
+                </a>
+
+                <div class="breadcrumb-elements-item dropdown p-0">
+                    <a href="#" class="breadcrumb-elements-item dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <i class="icon-gear mr-2"></i>
+                        Options
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 40px, 0px);">
+                        <a href="#" class="dropdown-item"><i class="icon-user-lock"></i> Account security</a>
+                        <a href="#" class="dropdown-item"><i class="icon-statistics"></i> Analytics</a>
+                        <a href="#" class="dropdown-item"><i class="icon-accessibility"></i> Accessibility</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="icon-gear"></i> Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-4">
+            
+                <button type="button" class="btn btn-sm bg-success" data-toggle="modal" data-target="#create_folder">Create Folder <i class="icon-folder-plus3 ml-2"></i></button>
+            
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4">
+            
+            <button type="button" class="btn btn-sm bg-success" data-toggle="modal" data-target="#upload_files">Upload files <i class="icon-file-plus ml-2"></i></button>
+            
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-4">
+            <a href="{{url_for('repository.shared_with_me')}}" class="btn btn-sm bg-success">Shared with me<i class="icon-folder-plus3 ml-2"></i></a>
+        </div>
+    </div>
+
+    {% include "includes/_messages.html" %}
+
+    
+
+
+
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+
+        <div class="datatable-scroll">
+            <table class="table datatable-button-init-basic dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+        <thead>
+            <tr role="row">
+                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-label="PRN Number: permanent registration number">Name</th>
+                <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-sort="ascending" aria-label="First Name: activate to sort column descending">Size</th>
+                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                    aria-label="Last Name: activate to sort column ascending">Type</th>
+                <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                    Share</th>
+                <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                    Download</th>
+                    <th class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 100px;">
+                        Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+              
+        {% for file in all_files %}
+        <tr role="row" class="odd">
+            <td style="color:black" class="sorting_1">
+                {% if file.type == 'Folder' %}
+                
+                <a style="color:black" href="{{url_for('repository.index',current_dir=current_dir+'/'+file.name)}}">
+                    <i class="{{file.icon}} mr-3 icon-2x"></i> 
+                    {{file.name}}
+                </a>
+
+                {% else %}
+                <i class="{{file.icon}} mr-3 icon-2x"></i> 
+                {{file.name}}
+                {% endif %}
+            </td>
+            <td>{{file.size}}</td>
+            <td>{{file.type}}</td>
+            <td class="text-center"><a href="{{url_for('repository.sharing',file_name=file.name,file_type=file.type,current_dir=current_dir)}}"><i class="icon-share3 mr-3 icon-1x"></i></a></td>
+            <td class="text-center">
+                <a href="{{url_for('repository.download',file_name=file.name,file_type=file.type,current_dir=current_dir)}}"><i class="icon-file-download mr-3 icon-1x"></i></a>
+            </td>
+            <td class="text-center"><a style="color: red;" href="{{url_for('repository.delete_file',file_path=current_dir+'/'+file.name,current_dir=current_dir)}}"><i class="icon-cross3 mr-3 icon-2x"></i></a></td>
+            
+        </tr>
+       {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+    </div>
+
+
+
+
+
+
+    <div id="create_folder" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{url_for('repository.create_folder',current_dir=current_dir)}}" method="POST">
+                <div class="modal-header bg-success">
+                    <h6 class="modal-title">Create a folder</h6>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2">Folder name</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="folder_name" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-success">Create</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="upload_files" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <div class="modal-header bg-success">
+                    <h6 class="modal-title">Upload files</h6>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <div class="modal-body">
+                    
+                    <div class="row">
+                        <div class="col-sm-6 offset-sm-3">
+                            <form action="{{url_for('repository.upload_files',current_dir = current_dir)}}" method="POST" enctype="multipart/form-data">
+                                <button type="button" class="btn btn-secondary btn-block" onclick="document.getElementById('inputFile').click()">Select
+                                    File</button>
+                                <div class="form-group inputDnD">
+                                    <label class="sr-only" for="inputFile">File Upload</label>
+                                    <input type="file" class="form-control-file text-warning font-weight-bold" multiple="true" name="files" id="inputFile"
+                                         onchange="readUrl(this)" data-title="Drag and drop a file">
+                                </div>
+                                <input class="btn btn-warning btn-block" type="submit" value="UPLOAD">
+                        </div>
+                    </div>
+                </div>
+
+                
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

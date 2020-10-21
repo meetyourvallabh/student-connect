@@ -43,9 +43,9 @@ mongo.init_app(app) # Mongo
 
 #BLUE PRINTS
 from attendance import attendance
-from repository.routes import repo
+from repository import repository
 app.register_blueprint(attendance.app,url_prefix='/attendance')
-app.register_blueprint(repo,url_prefix='/repository')
+app.register_blueprint(repository.app,url_prefix='/repository')
 
 
 
@@ -64,6 +64,7 @@ def cursor_to_list(cursor):
     for i in cursor:
         l.append(i)
     return l
+
 
 
 
@@ -511,7 +512,20 @@ def manage_teachers():
         username = request.form['fname'] + request.form['mname'][0] + request.form['lname'][0] + str(randint(11,99))
         password = request.form['fname'] + str(randint(111,999))
         hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        
+
+        username_exist = users.find_one({"username":username})
+        email_exist = users.find_one({"email":request.form['email']})
+
+
+        if username_exist:
+            flash("Username already exist","danger")
+            return redirect(url_for('manage_teachers'))
+        elif email_exist:
+            flash("Email already exist","danger")
+            return redirect(url_for('manage_teachers'))
+
+
+
         users.insert_one({
             'username':username,
             'fname':request.form['fname'],
@@ -550,6 +564,20 @@ def manage_hods():
         username = request.form['fname'] + request.form['mname'][0] + request.form['lname'][0] + str(randint(11,99))
         password = request.form['fname'] + str(randint(111,999))
         hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+        username_exist = users.find_one({"username":username})
+        email_exist = users.find_one({"email":request.form['email']})
+        hod_exist = users.find_one({"branch":request.form['branch']})
+
+        if username_exist:
+            flash("Username already exist","danger")
+            return redirect(url_for('manage_hods'))
+        elif email_exist:
+            flash("Email already exist","danger")
+            return redirect(url_for('manage_hods'))
+        elif hod_exist:
+            flash("HOD account for this department is already exist.","danger")
+            return redirect(url_for('manage_hods'))
         
         users.insert_one({
             'username':username,
@@ -694,6 +722,26 @@ def upload_profile_image_teacher(username):
         flash('Profile Image uploaded succesfully','success')
     return redirect(url_for('teacher_profile'))
 
+@app.route('/admin/delete_hod/<username>', methods=['GET', 'POST'])
+def delete_hod(username):
+    deleted  = mongo.db.users.delete_one({'username':username,'type':'hod'})
+    if deleted:
+        flash("HOD account deleted successfully","success")
+    else:
+        flash("ooops something went wrong!!! Try again","danger")
+    return redirect(url_for('manage_hods'))
+
+
+
+
+
+
+
+@app.route('/videourl',methods=["GET","POST"])
+def videourl():
+	if request.method == 'POST':
+		id = request.form['meeting']
+	return redirect("meet.vallabh.tech/"+id)
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'

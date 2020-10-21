@@ -141,14 +141,7 @@
                                 <!--Teachers area End-->
                                 {% endif %}
 
-                                <li class="nav-item">
-                                        <a href="{{url_for('repository.index')}}" class="nav-link">
-                                                <i class="icon-profile"></i>
-                                                <span>
-                                                        Repository
-                                                </span>
-                                        </a>
-                                </li>
+                                
 
                                 {% if session.type == "student" %}
                                 <!--Only students Area-->
@@ -178,6 +171,16 @@
 
 
                                 <!-- /main -->
+
+                                <li class="nav-item">
+                                        <a href="{{url_for('repository.index',current_dir='static/repository/'+session.username)}}"  id="/repository/"
+                                        class="nav-link {{active_in_link('/repository/')}}">
+                                                <i class="icon-profile"></i>
+                                                <span>
+                                                        Repository
+                                                </span>
+                                        </a>
+                                </li>
 
                                 <li class="nav-item">
                                         <a class="nav-link" data-toggle="modal" data-target="#modal_meeting">
@@ -219,7 +222,7 @@
 
                                 <h6 class="font-weight-semibold"><i class="fas fa-video"></i> Meetings</h6>
 
-                                <form method="POST" action="{{url_for('repository.videourl')}}" id="uploadform"
+                                <form method="POST" action="{{url_for('videourl')}}" id="uploadform"
                                         enctype="multipart/form-data" onsubmit="">
                                         <div>
                                                 <label>Enter Meeting Name:</label>
